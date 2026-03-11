@@ -41,7 +41,7 @@ export default function TopBar() {
   const curIdx = ORDER.indexOf(screen)
 
   return (
-    <div className="h-[60px] shrink-0 flex items-center px-6 gap-5"
+    <div className="h-15 shrink-0 flex items-center px-6 gap-5"
       style={{
         background: '#FDFAF4',
         borderBottom: '1px solid rgba(27,94,53,0.12)',
@@ -78,7 +78,7 @@ export default function TopBar() {
                 color: active ? '#1B5E35' : done ? 'rgba(27,94,53,0.4)' : 'rgba(107,128,112,0.45)',
               }}>
               {/* Step circle */}
-              <span className="w-[21px] h-[21px] rounded-full flex items-center justify-center shrink-0 transition-all"
+              <span className="w-5.25 h-5.25 rounded-full flex items-center justify-center shrink-0 transition-all"
                 style={{
                   fontSize: '9px', fontWeight: 700, border: '1.5px solid',
                   borderColor: active ? '#1B5E35' : done ? '#1B5E35' : 'rgba(27,94,53,0.2)',

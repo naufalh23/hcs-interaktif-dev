@@ -70,7 +70,7 @@ export default function FormScreen() {
       <div className="flex-1 overflow-hidden flex">
 
         {/* ── Left summary ────────────────────────────── */}
-        <div className="w-[360px] shrink-0 flex flex-col p-6 gap-4 overflow-y-auto"
+        <div className="w-90 shrink-0 flex flex-col p-6 gap-4 overflow-y-auto"
           style={{ background: '#F5F0E8', borderRight: '1px solid rgba(27,94,53,0.1)' }}>
 
           {/* Order card */}

@@ -45,7 +45,7 @@ function Logo({ size = 84 }: { size?: number }) {
 
 function GoldDivider() {
   return (
-    <div className="flex items-center gap-3 w-[280px]">
+    <div className="flex items-center gap-3 w-70">
       <div
         className="flex-1 h-px"
         style={{ background: "linear-gradient(to right,transparent,#C9A84C)" }}
@@ -73,7 +73,7 @@ export default function AttractScreen() {
 
   return (
     <div
-      className="absolute inset-0 overflow-hidden cursor-pointer animate-screen-in flex items-center justify-center"
+      className="absolute inset-0 overflow-hidden animate-screen-in flex items-center justify-center"
       style={{ background: "#F5F0E8" }}
     >
       {/* Dot texture */}
@@ -248,7 +248,7 @@ export default function AttractScreen() {
         {/* CTA */}
         <button
           onClick={() => goTo("type")}
-          className="inline-flex items-center transition-all hover:scale-[1.03] active:scale-[0.98]"
+          className="inline-flex items-center cursor-pointer transition-all hover:scale-[1.03] active:scale-[0.98]"
           style={{
             gap: 12,
             padding: "15px 44px",

@@ -83,7 +83,7 @@ function TypeCard({ type: t, selected, onSelect }: {
         )}
 
         {/* Illustration area */}
-        <div className="h-[132px] flex items-center justify-center overflow-hidden"
+        <div className="h-33 flex items-center justify-center overflow-hidden"
           style={{ background: 'linear-gradient(135deg,#EDE8DE 0%,#E3DDD2 100%)' }}>
           <svg width="186" height="120" viewBox="0 0 186 120">
             <ellipse cx="93" cy="115" rx="64" ry="7" fill="rgba(27,94,53,0.12)" />

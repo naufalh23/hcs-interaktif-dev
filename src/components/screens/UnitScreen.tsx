@@ -33,7 +33,7 @@ export default function UnitScreen() {
       <div className="flex-1 overflow-hidden flex">
 
         {/* ── Sidebar ─────────────────────────────────── */}
-        <div className="w-[250px] shrink-0 flex flex-col p-5 gap-4 overflow-y-auto"
+        <div className="w-62.5 shrink-0 flex flex-col p-5 gap-4 overflow-y-auto"
           style={{ background: '#F5F0E8', borderRight: '1px solid rgba(27,94,53,0.1)' }}>
 
           {/* Filter blok */}

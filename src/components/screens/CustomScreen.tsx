@@ -35,7 +35,7 @@ export default function CustomScreen() {
       <div className="flex-1 overflow-hidden flex">
 
         {/* ── Left: Live Preview ───────────────────────── */}
-        <div className="w-[380px] shrink-0 flex flex-col p-6 overflow-y-auto"
+        <div className="w-95 shrink-0 flex flex-col p-6 overflow-y-auto"
           style={{ background: '#F5F0E8', borderRight: '1px solid rgba(27,94,53,0.1)' }}>
 
           <div style={{ fontSize: '9.5px', letterSpacing: '3px', textTransform: 'uppercase', fontWeight: 700, color: '#9AAD9C', marginBottom: 14 }}>
@@ -43,7 +43,7 @@ export default function CustomScreen() {
           </div>
 
           <div className="flex-1 flex items-center justify-center">
-            <svg viewBox="0 0 320 280" className="w-full max-w-[295px] drop-shadow-lg" fill="none">
+            <svg viewBox="0 0 320 280" className="w-full max-w-73.75 drop-shadow-lg" fill="none">
               <ellipse cx="160" cy="270" rx="105" ry="9" fill="rgba(27,94,53,0.1)" />
               {/* Ground */}
               <rect x="40" y="258" width="240" height="6" rx="3" fill="rgba(27,94,53,0.06)" />
@@ -220,7 +220,7 @@ export default function CustomScreen() {
                       width: 38, height: 20, borderRadius: 10,
                       background: custom.addons[a.id] ? '#1B5E35' : '#D8D1C4',
                     }}>
-                    <div className="absolute top-[3px] w-[14px] h-[14px] rounded-full bg-white transition-all"
+                    <div className="absolute top-0.75 w-3.5 h-3.5 rounded-full bg-white transition-all"
                       style={{ left: custom.addons[a.id] ? 21 : 3, boxShadow: '0 1px 4px rgba(0,0,0,0.2)' }} />
                   </div>
                 </button>
@@ -262,7 +262,7 @@ function OptionRow({ opts, sel, onPick }: {
         const active = sel === o.id
         return (
           <button key={o.id} onClick={() => onPick(o.id)}
-            className="shrink-0 w-[112px] rounded-[14px] p-3 text-center transition-all relative"
+            className="shrink-0 w-28 rounded-[14px] p-3 text-center transition-all relative"
             style={{
               background: active ? 'rgba(27,94,53,0.08)' : '#FDFAF4',
               border: `1.5px solid ${active ? '#1B5E35' : 'rgba(27,94,53,0.12)'}`,

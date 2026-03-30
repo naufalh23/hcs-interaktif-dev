@@ -11,7 +11,7 @@ import SuccessScreen from "@/components/screens/SuccessScreen";
 import IdleOverlay from "@/components/kiosk/IdleOverlay";
 import type { HouseType } from "@/data/house-types";
 
-const IDLE_MS = 90_000; // 90 detik
+const IDLE_MS = 3600_000; // 90 detik
 
 export default function KioskShell({
   houseTypes,

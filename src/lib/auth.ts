@@ -4,8 +4,9 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  secret: process.env.AUTH_SECRET,
   session: { strategy: "jwt" },
-  pages: { signIn: "/contentmanage/login" },
+  pages:   { signIn: "/contentmanage/login" },
   callbacks: {
     jwt({ token, user }) {
       if (user) {
@@ -15,9 +16,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return token;
     },
     session({ session, token }) {
-      if (session.user) {
-        session.user.id   = token.id as string;
-        (session.user as any).role = token.role;
+      if (token) {
+        session.user.id           = token.id   as string;
+        (session.user as any).role = token.role as string;
       }
       return session;
     },
@@ -39,7 +40,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           user.password,
         );
         if (!valid) return null;
-        return { id: user.id, name: user.name, email: user.email, role: user.role };
+        return {
+          id:    user.id,
+          name:  user.name,
+          email: user.email,
+          role:  user.role,
+        };
       },
     }),
   ],

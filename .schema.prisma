@@ -1,0 +1,222 @@
+// ============================================================
+//  H City Sawangan — Prisma Schema
+//  Database: PostgreSQL
+//  Generator: prisma-client-js
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+//  ENUMS
+// ============================================================
+
+enum Badge {
+  ready
+  indent
+  hot
+}
+
+enum UnitStatus {
+  available
+  indent
+  sold
+}
+
+enum PaymentMethod {
+  KPR_Bank      @map("KPR Bank")
+  Cash_Keras    @map("Cash Keras")
+  Cash_Bertahap @map("Cash Bertahap")
+}
+
+enum LeadStatus {
+  new
+  contacted
+  negotiating
+  booked
+  cancelled
+}
+
+// ============================================================
+//  TIPE HUNIAN
+// ============================================================
+
+model HouseType {
+  id           Int      @id @default(autoincrement())
+  cluster      String   @db.VarChar(100)
+  name         String   @db.VarChar(100)
+  buildingArea Int      @map("building_area")
+  landArea     Int      @map("land_area")
+  floors       Int      @default(1)
+  bedrooms     Int
+  bathrooms    Int
+  basePrice    BigInt   @map("base_price")
+  badge        Badge
+  badgeLabel   String   @map("badge_label") @db.VarChar(50)
+  icon         String?  @db.VarChar(10)
+  description  String?  @db.Text
+
+  wallColors  WallColor[]
+  facilities  HouseFacility[]
+  units       Unit[]
+
+  @@map("house_types")
+}
+
+model WallColor {
+  id          Int       @id @default(autoincrement())
+  houseTypeId Int       @map("house_type_id")
+  hex         String    @db.VarChar(7)
+  name        String    @db.VarChar(50)
+
+  houseType   HouseType @relation(fields: [houseTypeId], references: [id], onDelete: Cascade)
+
+  @@map("wall_colors")
+}
+
+model HouseFacility {
+  id          Int       @id @default(autoincrement())
+  houseTypeId Int       @map("house_type_id")
+  facility    String    @db.VarChar(100)
+
+  houseType   HouseType @relation(fields: [houseTypeId], references: [id], onDelete: Cascade)
+
+  @@map("house_facilities")
+}
+
+// ============================================================
+//  UNIT / KAVLING
+// ============================================================
+
+model Unit {
+  id          Int        @id @default(autoincrement())
+  houseTypeId Int        @map("house_type_id")
+  code        String     @unique @db.VarChar(20)  // "D-01"
+  block       String     @db.VarChar(100)
+  facing      String     @db.VarChar(20)
+  status      UnitStatus @default(available)
+  price       BigInt
+  notes       String?    @db.VarChar(200)
+
+  houseType   HouseType  @relation(fields: [houseTypeId], references: [id])
+  leads       Lead[]
+
+  @@index([houseTypeId])
+  @@index([status])
+  @@map("units")
+}
+
+// ============================================================
+//  OPSI KUSTOMISASI
+// ============================================================
+
+model RoofOption {
+  id        Int     @id @default(autoincrement())
+  optionKey String  @unique @map("option_key") @db.VarChar(50)  // 'minimalis', 'joglo', dst
+  icon      String? @db.VarChar(10)
+  name      String  @db.VarChar(100)
+  desc      String? @db.VarChar(200)
+  price     BigInt  @default(0)
+  svgId     String? @map("svg_id") @db.VarChar(50)
+  roofColor String? @map("roof_color") @db.VarChar(7)  // hex preview SVG
+
+  @@map("roof_options")
+}
+
+model DoorOption {
+  id        Int     @id @default(autoincrement())
+  optionKey String  @unique @map("option_key") @db.VarChar(50)
+  icon      String? @db.VarChar(10)
+  name      String  @db.VarChar(100)
+  desc      String? @db.VarChar(200)
+  price     BigInt  @default(0)
+
+  @@map("door_options")
+}
+
+model WindowOption {
+  id        Int     @id @default(autoincrement())
+  optionKey String  @unique @map("option_key") @db.VarChar(50)
+  icon      String? @db.VarChar(10)
+  name      String  @db.VarChar(100)
+  desc      String? @db.VarChar(200)
+  price     BigInt  @default(0)
+
+  @@map("window_options")
+}
+
+model AddonOption {
+  id        Int     @id @default(autoincrement())
+  optionKey String  @unique @map("option_key") @db.VarChar(50)
+  icon      String? @db.VarChar(10)
+  name      String  @db.VarChar(100)
+  desc      String? @db.VarChar(200)
+  price     BigInt  @default(0)
+  svgGroup  String? @map("svg_group") @db.VarChar(50)
+
+  @@map("addon_options")
+}
+
+// ============================================================
+//  MARKETING AGENT
+// ============================================================
+
+model Agent {
+  id       Int     @id @default(autoincrement())
+  name     String  @db.VarChar(100)
+  code     String  @unique @db.VarChar(20)
+  isWalkin Boolean @default(false) @map("is_walkin")
+
+  leads    Lead[]
+
+  @@map("agents")
+}
+
+// ============================================================
+//  LEADS / BOOKING
+// ============================================================
+
+model Lead {
+  id            Int           @id @default(autoincrement())
+  bookingCode   String        @unique @map("booking_code") @db.VarChar(20)  // "HC-0001"
+  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz
+
+  // Data pemesan
+  fullName      String        @map("full_name") @db.VarChar(200)
+  phone         String        @db.VarChar(30)
+  email         String?       @db.VarChar(200)
+  agentId       Int?          @map("agent_id")
+  domicile      String?       @db.VarChar(100)
+
+  // Properti
+  unitId        Int           @map("unit_id")
+
+  // Harga snapshot saat booking
+  basePrice     BigInt        @map("base_price")
+  extraPrice    BigInt        @default(0) @map("extra_price")
+  totalPrice    BigInt        @map("total_price")
+  paymentMethod PaymentMethod @map("payment_method")
+
+  // Kustomisasi snapshot (JSON, tidak FK agar historis tetap akurat)
+  customization Json          @default("{}")
+
+  // Tracking
+  kioskId       String?       @map("kiosk_id") @db.VarChar(50)
+  status        LeadStatus    @default(new)
+
+  agent         Agent?        @relation(fields: [agentId], references: [id])
+  unit          Unit          @relation(fields: [unitId], references: [id])
+
+  @@index([bookingCode])
+  @@index([status])
+  @@index([agentId])
+  @@index([unitId])
+  @@index([createdAt(sort: Desc)])
+  @@map("leads")
+}

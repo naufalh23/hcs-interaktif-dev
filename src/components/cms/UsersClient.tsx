@@ -199,7 +199,7 @@ export default function UsersClient() {
                   onClick={submit}
                   disabled={busy}
                   className="flex-1 py-2.5 rounded-xl bg-linier-to-br from-[#1B5E35] to-[#2E7D52]
-                             text-[#F5F0E8] text-[12px] font-bold tracking-[1px] uppercase
+                             text-black text-[12px] font-bold tracking-[1px] uppercase
                              shadow-[0_4px_12px_rgba(27,94,53,0.2)] hover:scale-[1.01]
                              transition-all disabled:opacity-60"
                 >

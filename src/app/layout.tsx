@@ -36,7 +36,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id" className={`${serifFont.variable} ${sansFont.variable}`}>
-      <body className="bg-ink font-sans text-white overflow-hidden select-none antialiased">
+      <body className="bg-ink font-sans text-black overflow-hidden select-none antialiased">
         {children}
         <Toaster
           position="top-center"

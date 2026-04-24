@@ -7,17 +7,17 @@ import type { Screen } from "@/store/kiosk-store";
 import Image from "next/image";
 
 const STEPS: { key: Screen; label: string; n: number }[] = [
-  { key: "type", label: "Tipe", n: 1 },
-  { key: "custom", label: "Kustomisasi", n: 2 },
-  { key: "unit", label: "Unit", n: 3 },
+  { key: "type", label: "Cluster", n: 1 },
+  { key: "unit", label: "Unit", n: 2 },
+  { key: "custom", label: "Kustomisasi", n: 3 },
   { key: "form", label: "Pemesanan", n: 4 },
 ];
 
 const ORDER: Screen[] = [
   "attract",
   "type",
-  "custom",
   "unit",
+  "custom",
   "form",
   "success",
 ];
@@ -99,7 +99,8 @@ export default function TopBar() {
               key={s.key}
               className={cn(
                 "flex items-center gap-2 px-3 py-1.5 rounded-full transition-all duration-300",
-                active && "bg-[#1B5E35]/20 border border-[#1B5E35]/40 shadow-2xs",
+                active &&
+                  "bg-[#1B5E35]/20 border border-[#1B5E35]/40 shadow-2xs",
               )}
             >
               {/* Circle */}

@@ -110,7 +110,7 @@ function TypeCard({
         )}
 
         {/* Illustration */}
-        <div className="h-32 flex items-center justify-center bg-gradient-to-br from-[#EDE8DE] to-[#E3DDD2] overflow-hidden">
+        <div className="h-32 flex items-center justify-center bg-linier-to-br from-[#EDE8DE] to-[#E3DDD2] overflow-hidden">
           <IoHome
             size={120}
             className="text-[#1B5E35] drop-shadow-md opacity-90 group-hover:scale-110 transition-transform duration-300"

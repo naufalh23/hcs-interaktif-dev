@@ -1,46 +1,46 @@
+import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { jwtVerify, SignJWT } from "jose";
-import { cookies } from "next/headers";
+import { prisma } from "@/lib/prisma";
 
-const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
-
-export type Role = "USER" | "ADMIN";
-
-export interface JWTPayload {
-  userId: string;
-  email: string;
-  role: Role;
-}
-
-export async function hashPassword(password: string) {
-  return bcrypt.hash(password, 10);
-}
-
-export async function verifyPassword(password: string, hashed: string) {
-  return bcrypt.compare(password, hashed);
-}
-
-export async function signJWT(payload: JWTPayload) {
-  return new SignJWT({ ...payload })
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .setExpirationTime("7d")
-    .sign(secret);
-}
-
-export async function verifyJWT(token: string): Promise<JWTPayload | null> {
-  try {
-    const { payload } = await jwtVerify(token, secret);
-    return payload as unknown as JWTPayload;
-  } catch {
-    return null;
-  }
-}
-
-// Helper untuk server component/route handler
-export async function getCurrentUser(): Promise<JWTPayload | null> {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
-  if (!token) return null;
-  return verifyJWT(token);
-}
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  session: { strategy: "jwt" },
+  pages: { signIn: "/contentmanage/login" },
+  callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        token.id   = user.id;
+        token.role = (user as any).role;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      if (session.user) {
+        session.user.id   = token.id as string;
+        (session.user as any).role = token.role;
+      }
+      return session;
+    },
+  },
+  providers: [
+    Credentials({
+      credentials: {
+        email:    { label: "Email",    type: "email"    },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) return null;
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email as string },
+        });
+        if (!user) return null;
+        const valid = await bcrypt.compare(
+          credentials.password as string,
+          user.password,
+        );
+        if (!valid) return null;
+        return { id: user.id, name: user.name, email: user.email, role: user.role };
+      },
+    }),
+  ],
+});

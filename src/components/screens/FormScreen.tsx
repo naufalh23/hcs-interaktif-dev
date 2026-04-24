@@ -92,69 +92,36 @@ export default function FormScreen() {
   if (!type || !unit) return null;
 
   return (
-    <div
-      className="absolute inset-0 flex flex-col animate-screen-in"
-      style={{ background: "#EDE8DE" }}
-    >
+    <div className="absolute inset-0 flex flex-col animate-screen-in bg-[#EDE8DE]">
       <TopBar />
       <div className="flex-1 overflow-hidden flex">
         {/* ── Left summary ────────────────────────────── */}
         <div
-          className="w-90 shrink-0 flex flex-col p-6 gap-4 overflow-y-auto"
-          style={{
-            background: "#F5F0E8",
-            borderRight: "1px solid rgba(27,94,53,0.1)",
-          }}
+          className="w-90 shrink-0 flex flex-col p-6 gap-4 overflow-y-auto
+                        bg-[#F5F0E8] border-r border-[rgba(27,94,53,0.1)]"
         >
           {/* Order card */}
           <div
-            className="rounded-[18px] p-5"
-            style={{
-              background: "#FDFAF4",
-              border: "1px solid rgba(27,94,53,0.13)",
-              boxShadow: "0 3px 16px rgba(27,94,53,0.07)",
-            }}
+            className="rounded-[18px] p-5 bg-[#FDFAF4]
+                          border border-[rgba(27,94,53,0.13)]
+                          shadow-[0_3px_16px_rgba(27,94,53,0.07)]"
           >
             <div className="flex items-start gap-3 mb-4">
-              <span style={{ fontSize: 38 }}>{type.icon}</span>
+              <span className="text-[38px]">{type.icon}</span>
               <div>
-                <div
-                  style={{
-                    fontSize: "9px",
-                    letterSpacing: "2px",
-                    textTransform: "uppercase",
-                    fontWeight: 700,
-                    color: "#1B5E35",
-                    marginBottom: 2,
-                  }}
-                >
+                <div className="text-[9px] tracking-[2px] uppercase font-bold text-[#1B5E35] mb-0.5">
                   {type.cluster}
                 </div>
-                <div
-                  className="font-serif font-semibold"
-                  style={{
-                    fontSize: "20px",
-                    color: "#163F25",
-                    lineHeight: 1.1,
-                  }}
-                >
+                <div className="font-serif font-semibold text-[20px] text-[#163F25] leading-[1.1]">
                   {type.name}
                 </div>
-                <div
-                  style={{ fontSize: "11px", color: "#8A9E8C", marginTop: 1 }}
-                >
+                <div className="text-[11px] text-[#8A9E8C] mt-px">
                   Kavling {unit.code}
                 </div>
               </div>
             </div>
 
-            <div
-              style={{
-                borderTop: "1px solid rgba(27,94,53,0.1)",
-                paddingTop: 12,
-                marginBottom: 4,
-              }}
-            >
+            <div className="border-t border-[rgba(27,94,53,0.1)] pt-3 mb-1">
               {[
                 ["Kavling", unit.code],
                 ["Arah Hadap", unit.facing],
@@ -162,89 +129,43 @@ export default function FormScreen() {
                 ["LB / LT", `${type.buildingArea}m² / ${type.landArea}m²`],
               ].map(([l, v]) => (
                 <div key={l} className="flex justify-between py-1.5">
-                  <span style={{ fontSize: "11px", color: "#8A9E8C" }}>
-                    {l}
-                  </span>
-                  <span
-                    style={{
-                      fontSize: "11px",
-                      fontWeight: 700,
-                      color: "#1B5E35",
-                    }}
-                  >
+                  <span className="text-[11px] text-[#8A9E8C]">{l}</span>
+                  <span className="text-[11px] font-bold text-[#1B5E35]">
                     {v}
                   </span>
                 </div>
               ))}
             </div>
 
-            <div
-              style={{
-                borderTop: "1px dashed rgba(27,94,53,0.12)",
-                paddingTop: 10,
-                marginTop: 4,
-              }}
-            >
+            <div className="border-t border-dashed border-[rgba(27,94,53,0.12)] pt-2.5 mt-1">
               <div className="flex justify-between py-1">
-                <span style={{ fontSize: "11px", color: "#8A9E8C" }}>
-                  Harga Dasar
-                </span>
-                <span
-                  style={{
-                    fontSize: "11px",
-                    fontWeight: 600,
-                    color: "#4A6A55",
-                  }}
-                >
+                <span className="text-[11px] text-[#8A9E8C]">Harga Dasar</span>
+                <span className="text-[11px] font-semibold text-[#4A6A55]">
                   {formatPrice(unit.price)}
                 </span>
               </div>
               {extra > 0 && (
                 <div className="flex justify-between py-1">
-                  <span style={{ fontSize: "11px", color: "#8A9E8C" }}>
+                  <span className="text-[11px] text-[#8A9E8C]">
                     Kustomisasi
                   </span>
-                  <span
-                    style={{
-                      fontSize: "11px",
-                      fontWeight: 600,
-                      color: "#8B6A00",
-                    }}
-                  >
+                  <span className="text-[11px] font-semibold text-[#8B6A00]">
                     +{formatPrice(extra)}
                   </span>
                 </div>
               )}
               <div
-                className="flex justify-between items-baseline mt-2 pt-2"
-                style={{ borderTop: "1.5px solid rgba(27,94,53,0.1)" }}
+                className="flex justify-between items-baseline mt-2 pt-2
+                              border-t-[1.5px] border-[rgba(27,94,53,0.1)]"
               >
-                <span
-                  style={{
-                    fontSize: "10px",
-                    fontWeight: 700,
-                    color: "#163F25",
-                    textTransform: "uppercase",
-                    letterSpacing: "1px",
-                  }}
-                >
+                <span className="text-[10px] font-bold text-[#163F25] uppercase tracking-[1px]">
                   Total Estimasi
                 </span>
-                <span
-                  className="font-serif font-bold"
-                  style={{ fontSize: "24px", color: "#163F25" }}
-                >
+                <span className="font-serif font-bold text-[24px] text-[#163F25]">
                   {formatPrice(total)}
                 </span>
               </div>
-              <div
-                style={{
-                  fontSize: "9.5px",
-                  color: "#9AAD9C",
-                  textAlign: "right",
-                  marginTop: 2,
-                }}
-              >
+              <div className="text-[9.5px] text-[#9AAD9C] text-right mt-0.5">
                 Belum termasuk notaris &amp; pajak
               </div>
             </div>
@@ -252,16 +173,7 @@ export default function FormScreen() {
 
           {/* Payment method */}
           <div>
-            <div
-              style={{
-                fontSize: "9.5px",
-                letterSpacing: "2.5px",
-                textTransform: "uppercase",
-                fontWeight: 700,
-                color: "#9AAD9C",
-                marginBottom: 8,
-              }}
-            >
+            <div className="text-[9.5px] tracking-[2.5px] uppercase font-bold text-[#9AAD9C] mb-2">
               Metode Pembayaran
             </div>
             <div className="flex flex-col gap-2">
@@ -270,39 +182,30 @@ export default function FormScreen() {
                   key={o.value}
                   type="button"
                   onClick={() => setPay(o.value)}
-                  className="flex items-center gap-3 p-3 rounded-xl text-left transition-all"
-                  style={{
-                    background:
-                      payment === o.value ? "rgba(27,94,53,0.08)" : "#FDFAF4",
-                    border: `1.5px solid ${payment === o.value ? "rgba(27,94,53,0.3)" : "rgba(27,94,53,0.1)"}`,
-                  }}
+                  className={cn(
+                    "flex items-center gap-3 p-3 rounded-xl text-left transition-all border-[1.5px]",
+                    payment === o.value
+                      ? "bg-[rgba(27,94,53,0.08)] border-[rgba(27,94,53,0.3)]"
+                      : "bg-[#FDFAF4] border-[rgba(27,94,53,0.1)]",
+                  )}
                 >
-                  <span style={{ fontSize: 20 }}>{o.icon}</span>
+                  <span className="text-xl">{o.icon}</span>
                   <div className="flex-1">
-                    <div
-                      style={{
-                        fontSize: "12.5px",
-                        fontWeight: 700,
-                        color: "#163F25",
-                      }}
-                    >
+                    <div className="text-[12.5px] font-bold text-[#163F25]">
                       {o.label}
                     </div>
-                    <div style={{ fontSize: "10px", color: "#8A9E8C" }}>
-                      {o.sub}
-                    </div>
+                    <div className="text-[10px] text-[#8A9E8C]">{o.sub}</div>
                   </div>
                   <div
-                    className="w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0"
-                    style={{
-                      borderColor:
-                        payment === o.value ? "#1B5E35" : "rgba(27,94,53,0.2)",
-                      background:
-                        payment === o.value ? "#1B5E35" : "transparent",
-                    }}
+                    className={cn(
+                      "size-4 rounded-full border-2 flex items-center justify-center shrink-0",
+                      payment === o.value
+                        ? "border-[#1B5E35] bg-[#1B5E35]"
+                        : "border-[rgba(27,94,53,0.2)] bg-transparent",
+                    )}
                   >
                     {payment === o.value && (
-                      <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                      <div className="size-1.5 rounded-full bg-white" />
                     )}
                   </div>
                 </button>
@@ -315,32 +218,19 @@ export default function FormScreen() {
         <div className="flex-1 p-8 overflow-y-auto">
           {/* Promo banner */}
           <div
-            className="flex items-center gap-2.5 rounded-xl px-4 py-3 mb-6"
-            style={{
-              background: "rgba(201,168,76,0.1)",
-              border: "1px solid rgba(201,168,76,0.3)",
-            }}
+            className="flex items-center gap-2.5 rounded-xl px-4 py-3 mb-6
+                          bg-[rgba(201,168,76,0.1)] border border-[rgba(201,168,76,0.3)]"
           >
-            <span style={{ fontSize: 16 }}>🎁</span>
-            <div
-              style={{ fontSize: "12px", fontWeight: 500, color: "#7A5A00" }}
-            >
+            <span className="text-base">🎁</span>
+            <div className="text-[12px] font-medium text-[#7A5A00]">
               <strong>Promo All-In 5Jt</strong> — Free Biaya KPR, BPHTB &amp;
               AJB! Terbatas.
             </div>
           </div>
 
           <div
-            style={{
-              fontSize: "10px",
-              letterSpacing: "2.5px",
-              textTransform: "uppercase",
-              fontWeight: 700,
-              color: "#9AAD9C",
-              marginBottom: 16,
-              paddingBottom: 12,
-              borderBottom: "1px solid rgba(27,94,53,0.1)",
-            }}
+            className="text-[10px] tracking-[2.5px] uppercase font-bold text-[#9AAD9C]
+                          mb-4 pb-3 border-b border-[rgba(27,94,53,0.1)]"
           >
             Data Diri Pemesan
           </div>
@@ -400,19 +290,13 @@ export default function FormScreen() {
 
             {/* Disclaimer */}
             <div
-              className="rounded-xl p-4"
-              style={{
-                background: "rgba(27,94,53,0.06)",
-                border: "1px solid rgba(27,94,53,0.12)",
-                fontSize: "11.5px",
-                color: "#7A9480",
-                lineHeight: 1.6,
-              }}
+              className="rounded-xl p-4 text-[11.5px] text-[#7A9480] leading-relaxed
+                            bg-[rgba(27,94,53,0.06)] border border-[rgba(27,94,53,0.12)]"
             >
               ⚠️ Form ini adalah{" "}
-              <strong style={{ color: "#4A6A55" }}>registrasi minat</strong>,
+              <strong className="text-[#4A6A55]">registrasi minat</strong>,
               bukan pembelian resmi. Tim H City Sawangan akan menghubungi Anda
-              di <strong style={{ color: "#4A6A55" }}>+62 811 1130 114</strong>{" "}
+              di <strong className="text-[#4A6A55]">+62 811 1130 114</strong>{" "}
               dalam 1×24 jam.
             </div>
 
@@ -420,15 +304,9 @@ export default function FormScreen() {
               <button
                 type="button"
                 onClick={() => goTo("unit")}
-                style={{
-                  padding: "14px 20px",
-                  borderRadius: 12,
-                  border: "1.5px solid rgba(27,94,53,0.16)",
-                  background: "transparent",
-                  fontSize: "12.5px",
-                  fontWeight: 600,
-                  color: "#7A9480",
-                }}
+                className="px-5 py-3.5 rounded-xl border-[1.5px] border-[rgba(27,94,53,0.16)]
+                           bg-transparent text-[12.5px] font-semibold text-[#7A9480]
+                           transition-all hover:bg-[rgba(27,94,53,0.06)]"
               >
                 ← Kembali
               </button>
@@ -436,23 +314,11 @@ export default function FormScreen() {
                 type="submit"
                 disabled={busy}
                 className={cn(
-                  "flex-1 transition-all",
-                  !busy && "hover:scale-[1.01]",
+                  "flex-1 py-3.5 rounded-xl text-[13px] font-bold tracking-[2px] uppercase transition-all",
+                  busy
+                    ? "bg-[rgba(27,94,53,0.2)] text-[#7A9480] cursor-not-allowed"
+                    : "bg-linier-to-br from-[#1B5E35] to-[#2E7D52] text-[#F5F0E8] cursor-pointer shadow-[0_6px_24px_rgba(27,94,53,0.25)] hover:scale-[1.01]",
                 )}
-                style={{
-                  padding: "14px",
-                  borderRadius: 12,
-                  background: busy
-                    ? "rgba(27,94,53,0.2)"
-                    : "linear-gradient(135deg,#1B5E35,#2E7D52)",
-                  color: busy ? "#7A9480" : "#F5F0E8",
-                  fontSize: "13px",
-                  fontWeight: 700,
-                  letterSpacing: "2px",
-                  textTransform: "uppercase",
-                  cursor: busy ? "not-allowed" : "pointer",
-                  boxShadow: busy ? "none" : "0 6px 24px rgba(27,94,53,0.25)",
-                }}
               >
                 {busy ? "Menyimpan…" : "🏠 Konfirmasi Booking →"}
               </button>
@@ -485,19 +351,11 @@ function Field({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label
-        style={{
-          fontSize: "9.5px",
-          fontWeight: 700,
-          letterSpacing: "1.5px",
-          textTransform: "uppercase",
-          color: "#8A9E8C",
-        }}
-      >
+      <label className="text-[9.5px] font-bold tracking-[1.5px] uppercase text-[#8A9E8C]">
         {label}
       </label>
       {children}
-      {err && <span style={{ fontSize: "10px", color: "#B03030" }}>{err}</span>}
+      {err && <span className="text-[10px] text-[#B03030]">{err}</span>}
     </div>
   );
 }

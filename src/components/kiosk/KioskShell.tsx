@@ -51,8 +51,8 @@ export default function KioskShell({
     <div className="relative w-full h-full overflow-hidden bg-ink">
       {screen === "attract" && <AttractScreen />}
       {screen === "type" && <TypeScreen houseTypes={houseTypes} />}
-      {screen === "custom" && <CustomScreen />}
       {screen === "unit" && <UnitScreen />}
+      {screen === "custom" && <CustomScreen />}
       {screen === "form" && <FormScreen />}
       {screen === "success" && <SuccessScreen />}
       <IdleOverlay idleMs={IDLE_MS} />

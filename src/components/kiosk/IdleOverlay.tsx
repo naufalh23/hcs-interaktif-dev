@@ -18,7 +18,6 @@ export default function IdleOverlay({ idleMs }: { idleMs: number }) {
       clearTimeout(idle.current);
       idle.current = null;
     }
-
     if (cd.current) {
       clearInterval(cd.current);
       cd.current = null;
@@ -46,9 +45,7 @@ export default function IdleOverlay({ idleMs }: { idleMs: number }) {
 
   useEffect(() => {
     const events = ["mousemove", "mousedown", "touchstart", "keydown"];
-
     events.forEach((e) => window.addEventListener(e, start));
-
     return () => {
       events.forEach((e) => window.removeEventListener(e, start));
     };
@@ -58,43 +55,18 @@ export default function IdleOverlay({ idleMs }: { idleMs: number }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4"
-      style={{
-        background: "rgba(245,240,232,0.94)",
-        backdropFilter: "blur(16px)",
-        WebkitBackdropFilter: "blur(16px)",
-      }}
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4
+                 bg-[rgba(245,240,232,0.94)] backdrop-blur-xl"
     >
       {/* Rings */}
-      {[180, 260].map((s, i) => (
-        <div
-          key={s}
-          className="absolute rounded-full pointer-events-none"
-          style={{
-            width: s,
-            height: s,
-            border: `1.5px solid rgba(27,94,53,${i === 0 ? 0.15 : 0.07})`,
-          }}
-        />
-      ))}
+      <div className="absolute size-45 rounded-full border border-[rgba(27,94,53,0.15)] pointer-events-none" />
+      <div className="absolute size-65 rounded-full border border-[rgba(27,94,53,0.07)] pointer-events-none" />
 
-      <p
-        style={{
-          fontSize: "10px",
-          letterSpacing: "4px",
-          textTransform: "uppercase",
-          fontWeight: 600,
-          color: "#9AAD9C",
-          marginBottom: 4,
-        }}
-      >
+      <p className="text-[10px] tracking-[4px] uppercase font-semibold text-[#9AAD9C] mb-1">
         Sesi akan berakhir dalam
       </p>
 
-      <div
-        className="font-serif font-bold leading-none animate-fade-up"
-        style={{ fontSize: "100px", color: "#1B5E35", lineHeight: 1 }}
-      >
+      <div className="font-serif font-bold leading-none animate-fade-up text-[100px] text-[#1B5E35]">
         {count}
       </div>
 
@@ -104,18 +76,11 @@ export default function IdleOverlay({ idleMs }: { idleMs: number }) {
           setShow(false);
           start();
         }}
-        className="inline-flex items-center gap-2.5 transition-all hover:scale-[1.03] mt-3"
-        style={{
-          padding: "14px 36px",
-          borderRadius: 999,
-          background: "linear-gradient(135deg,#1B5E35,#2E7D52)",
-          color: "#F5F0E8",
-          fontSize: "11.5px",
-          fontWeight: 700,
-          letterSpacing: "3px",
-          textTransform: "uppercase",
-          boxShadow: "0 8px 28px rgba(27,94,53,0.25)",
-        }}
+        className="inline-flex items-center gap-2.5 mt-3 px-9 py-3.5 rounded-full
+                   bg-linier-to-br from-[#1B5E35] to-[#2E7D52]
+                   text-[#F5F0E8] text-[11.5px] font-bold tracking-[3px] uppercase
+                   shadow-[0_8px_28px_rgba(27,94,53,0.25)]
+                   transition-transform hover:scale-[1.03]"
       >
         Lanjutkan →
       </button>

@@ -46,10 +46,7 @@ function Logo({ size = 84 }: { size?: number }) {
 function GoldDivider() {
   return (
     <div className="flex items-center gap-3 w-70">
-      <div
-        className="flex-1 h-px"
-        style={{ background: "linear-gradient(to right,transparent,#C9A84C)" }}
-      />
+      <div className="flex-1 h-px bg-linier-to-r from-transparent to-[#C9A84C]" />
       <svg width="8" height="8" viewBox="0 0 8 8">
         <rect
           x="2"
@@ -60,10 +57,7 @@ function GoldDivider() {
           transform="rotate(45 4 4)"
         />
       </svg>
-      <div
-        className="flex-1 h-px"
-        style={{ background: "linear-gradient(to left,transparent,#C9A84C)" }}
-      />
+      <div className="flex-1 h-px bg-linier-to-l from-transparent to-[#C9A84C]" />
     </div>
   );
 }
@@ -72,28 +66,12 @@ export default function AttractScreen() {
   const goTo = useStore((s) => s.goTo);
 
   return (
-    <div
-      className="absolute inset-0 overflow-hidden animate-screen-in flex items-center justify-center"
-      style={{ background: "#F5F0E8" }}
-    >
+    <div className="absolute inset-0 overflow-hidden animate-screen-in flex items-center justify-center bg-[#F5F0E8]">
       {/* Dot texture */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, rgba(27,94,53,0.09) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
-        }}
-      />
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle,rgba(27,94,53,0.09)_1px,transparent_1px)] bg-size-[24px_24px]" />
 
       {/* Centre radial bloom */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 70% 60% at 50% 46%, rgba(245,240,232,0.96) 28%, rgba(220,210,188,0.5) 100%)",
-        }}
-      />
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_70%_60%_at_50%_46%,rgba(245,240,232,0.96)_28%,rgba(220,210,188,0.5)_100%)]" />
 
       {/* Green side pillars */}
       {[
@@ -110,34 +88,24 @@ export default function AttractScreen() {
       ].map(({ cls, rotate, text }) => (
         <div
           key={cls}
-          className={`absolute ${cls} top-0 bottom-0 w-16 pointer-events-none flex flex-col`}
-          style={{
-            background:
-              "linear-gradient(180deg,#163F25 0%,#1B5E35 45%,#2E7D52 70%,#1B5E35 100%)",
-          }}
+          className={`absolute ${cls} top-0 bottom-0 w-16 pointer-events-none flex flex-col
+      bg-[linear-gradient(180deg,#163F25_0%,#1B5E35_45%,#2E7D52_70%,#1B5E35_100%)]`}
         >
-          <div className="h-1 shrink-0" style={{ background: "#C9A84C" }} />
+          <div className="h-1 shrink-0 bg-[#C9A84C]" />
           <div
-            className="flex-1 flex items-center justify-center overflow-hidden"
-            style={{
-              writingMode: "vertical-rl",
-              transform: rotate ? "rotate(180deg)" : "none",
-              fontSize: "8px",
-              fontWeight: 600,
-              letterSpacing: "3px",
-              color: "rgba(245,240,232,0.36)",
-              textTransform: "uppercase",
-              userSelect: "none",
-            }}
+            className={`flex-1 flex items-center justify-center overflow-hidden
+      [writing-mode:vertical-rl] text-[8px] font-semibold tracking-[3px]
+      text-[rgba(245,240,232,0.36)] uppercase select-none
+      ${rotate ? "rotate-180" : ""}`}
           >
             {text}
           </div>
-          <div className="h-1 shrink-0" style={{ background: "#C9A84C" }} />
+          <div className="h-1 shrink-0 bg-[#C9A84C]" />
         </div>
       ))}
 
       {/* Rotating rings */}
-      {[380, 580, 790].map((s, i) => (
+      {/* {[380, 580, 790].map((s, i) => (
         <div
           key={s}
           className="absolute rounded-full pointer-events-none"
@@ -148,10 +116,10 @@ export default function AttractScreen() {
             animation: `spin ${[30, 48, 68][i]}s linear infinite ${i === 1 ? "reverse" : ""}`,
           }}
         />
-      ))}
+      ))} */}
 
       {/* Corner ornaments */}
-      {[
+      {/* {[
         { top: 72, left: 80, d: "M0,26 L0,0 L26,0" },
         { top: 72, right: 80, d: "M26,26 L26,0 L0,0" },
         { bottom: 90, left: 80, d: "M0,0 L0,26 L26,26" },
@@ -176,15 +144,12 @@ export default function AttractScreen() {
             />
           </svg>
         );
-      })}
+      })} */}
 
       {/* Main content */}
-      <div
-        className="relative z-10 flex flex-col items-center text-center"
-        style={{ gap: 0, paddingLeft: 80, paddingRight: 80 }}
-      >
+      <div className="relative z-10 flex flex-col items-center text-center gap-0 px-20">
         {/* Logo + brand */}
-        <div className="flex flex-col items-center mb-5" style={{ gap: 10 }}>
+        <div className="flex flex-col items-center mb-5 gap-2.5">
           <Image
             src="/Logo-HCS.png"
             alt="Company Logo"
@@ -193,46 +158,26 @@ export default function AttractScreen() {
             className="w-auto h-32"
             priority
           />
-          <div
-            className="font-serif font-bold"
-            style={{ fontSize: "26px", letterSpacing: "6px", color: "#163F25" }}
-          >
-            H City <span style={{ color: "#1B5E35" }}>Sawangan</span>
+          <div className="font-serif font-bold text-[26px] tracking-[6px] text-[#163F25]">
+            H City <span className="text-[#1B5E35]">Sawangan</span>
           </div>
-          <div
-            style={{
-              fontSize: "9.5px",
-              letterSpacing: "4.5px",
-              color: "#8A9E8C",
-              textTransform: "uppercase",
-              fontWeight: 600,
-            }}
-          >
+          <div className="text-[9.5px] tracking-[4.5px] text-[#8A9E8C] uppercase font-semibold">
             A home to live
           </div>
         </div>
 
-        <div style={{ marginBottom: 24 }}>
+        <div className="mb-6">
           <GoldDivider />
         </div>
 
         {/* Headline */}
-        <h1
-          className="font-serif font-light"
-          style={{
-            fontSize: "64px",
-            lineHeight: 0.86,
-            letterSpacing: "-0.5px",
-            color: "#163F25",
-            marginBottom: 16,
-          }}
-        >
+        <h1 className="font-serif font-light text-[64px] leading-[0.86] tracking-[-0.5px] text-[#163F25] mb-7.5">
           Temukan Hunian
           <br />
-          <em style={{ color: "#1B5E35", fontStyle: "italic" }}>Impian</em> Anda
+          <em className="text-[#1B5E35] italic">Impian</em> Anda
         </h1>
 
-        <p
+        {/* <p
           style={{
             fontSize: "10.5px",
             letterSpacing: "4px",
@@ -243,40 +188,28 @@ export default function AttractScreen() {
           }}
         >
           7 Cluster · 13 Fasilitas · Siap Huni
-        </p>
+        </p> */}
 
         {/* CTA */}
         <button
           onClick={() => goTo("type")}
-          className="inline-flex items-center cursor-pointer transition-all hover:scale-[1.03] active:scale-[0.98]"
-          style={{
-            gap: 12,
-            padding: "15px 44px",
-            borderRadius: 999,
-            background: "linear-gradient(135deg,#1B5E35 0%,#2E7D52 100%)",
-            color: "#F5F0E8",
-            fontSize: "11.5px",
-            fontWeight: 700,
-            letterSpacing: "3px",
-            textTransform: "uppercase",
-            boxShadow:
-              "0 8px 32px rgba(27,94,53,0.28), 0 2px 8px rgba(27,94,53,0.14), inset 0 1px 0 rgba(255,255,255,0.1)",
-          }}
+          className="inline-flex items-center gap-3 px-11 py-3.75 rounded-full
+      bg-[linear-gradient(135deg,#1B5E35_0%,#2E7D52_100%)]
+      text-[#F5F0E8] text-[11.5px] font-bold tracking-[3px] uppercase
+      shadow-[0_8px_32px_rgba(27,94,53,0.28),0_2px_8px_rgba(27,94,53,0.14),inset_0_1px_0_rgba(255,255,255,0.1)]
+      cursor-pointer transition-all hover:scale-[1.03] active:scale-[0.98]"
         >
           Mulai Eksplorasi
           <span
-            className="inline-flex items-center justify-center w-7 h-7 rounded-full"
-            style={{ background: "rgba(245,240,232,0.16)", fontSize: 14 }}
+            className="inline-flex items-center justify-center w-7 h-7 rounded-full
+      bg-[rgba(245,240,232,0.16)] text-sm"
           >
             →
           </span>
         </button>
 
         {/* Stats */}
-        <div
-          className="flex mt-8"
-          style={{ borderTop: "1px solid rgba(27,94,53,0.1)", paddingTop: 22 }}
-        >
+        <div className="flex mt-8 border-t border-[rgba(27,94,53,0.1)] pt-5.5">
           {[
             ["7", "Cluster"],
             ["13", "Fasilitas"],
@@ -285,27 +218,12 @@ export default function AttractScreen() {
           ].map(([n, l], i) => (
             <div
               key={l}
-              className="flex flex-col items-center"
-              style={{
-                padding: "0 26px",
-                borderRight: i < 3 ? "1px solid rgba(27,94,53,0.12)" : "none",
-              }}
+              className={`flex flex-col items-center px-6.5 ${i < 3 ? "border-r border-[rgba(27,94,53,0.12)]" : ""}`}
             >
-              <div
-                className="font-serif font-bold leading-none"
-                style={{ fontSize: "34px", color: "#1B5E35", marginBottom: 4 }}
-              >
+              <div className="font-serif font-bold leading-none text-[34px] text-[#1B5E35] mb-1">
                 {n}
               </div>
-              <div
-                style={{
-                  fontSize: "8.5px",
-                  letterSpacing: "2.5px",
-                  textTransform: "uppercase",
-                  fontWeight: 600,
-                  color: "#9AAD9C",
-                }}
-              >
+              <div className="text-[8.5px] tracking-[2.5px] uppercase font-semibold text-[#9AAD9C]">
                 {l}
               </div>
             </div>
@@ -314,7 +232,7 @@ export default function AttractScreen() {
       </div>
 
       {/* Tap hint */}
-      <div
+      {/* <div
         className="absolute flex items-center gap-2 animate-fade-up"
         style={{
           bottom: 96,
@@ -343,11 +261,11 @@ export default function AttractScreen() {
           className="w-1.5 h-1.5 rounded-full animate-blink"
           style={{ background: "#C9A84C", animationDelay: "0.5s" }}
         />
-      </div>
+      </div> */}
 
       {/* Bottom tipe strip */}
-      <div
-        className="absolute bottom-0 flex pointer-events-none"
+      {/* <div
+        className="absolute bottom-0 flex pointer-events-none bg-yellow-300"
         style={{
           left: 64,
           right: 64,
@@ -386,7 +304,7 @@ export default function AttractScreen() {
             </div>
           ),
         )}
-      </div>
+      </div> */}
     </div>
   );
 }

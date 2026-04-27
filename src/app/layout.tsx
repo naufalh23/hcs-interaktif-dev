@@ -41,12 +41,9 @@ export default function RootLayout({
         <Toaster
           position="top-center"
           toastOptions={{
-            style: {
-              background: "#1A2620",
-              border: "1px solid rgba(76,175,120,.3)",
-              color: "#F4FAF6",
-            },
+            className: "rounded-xl px-4 py-3 shadow-md",
           }}
+          richColors
         />
       </body>
     </html>

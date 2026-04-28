@@ -43,3 +43,13 @@
     background-clip: text;
   }
 }
+
+.input-modern {
+  @apply w-full rounded-xl px-3 py-2.5 text-sm
+         border border-[#D6E2DA]
+         bg-white
+         outline-none
+         transition-all
+         focus:border-[#1B5E35]
+         focus:ring-4 focus:ring-[#1B5E35]/10;
+}

@@ -77,7 +77,7 @@ export default function IdleOverlay({ idleMs }: { idleMs: number }) {
           start();
         }}
         className="inline-flex items-center gap-2.5 mt-3 px-9 py-3.5 rounded-full
-                   bg-linier-to-br from-[#1B5E35] to-[#2E7D52]
+                   bg-linear-to-br from-[#1B5E35] to-[#2E7D52]
                    text-[#F5F0E8] text-[11.5px] font-bold tracking-[3px] uppercase
                    shadow-[0_8px_28px_rgba(27,94,53,0.25)]
                    transition-transform hover:scale-[1.03]"

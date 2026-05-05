@@ -21,6 +21,10 @@ export const metadata: Metadata = {
   title: "HCS | Interactive",
   description: "HCS Simulation | HCS Interactive | HCS Custom",
   robots: "noindex,nofollow",
+  icons: {
+    icon: "/Logo-HCS.png",        // tab icon utama
+    // apple: "/apple-touch-icon.png", // iOS
+  },
 };
 export const viewport: Viewport = {
   width: 1280,

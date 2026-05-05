@@ -117,7 +117,7 @@ export default function UnitScreen() {
           </div>
 
           <button
-            onClick={() => goTo("custom")}
+            onClick={() => goTo("type")}
             className="w-full py-2.75 rounded-xl border-[1.5px] border-[rgba(27,94,53,0.16)]
                        bg-transparent text-xs font-semibold text-[#7A9480]
                        transition-all hover:bg-[rgba(27,94,53,0.06)]"
@@ -151,12 +151,12 @@ export default function UnitScreen() {
 
           <div className="mt-auto pt-2">
             <button
-              onClick={() => selUnit && goTo("form")}
+              onClick={() => selUnit && goTo("custom")}
               disabled={!selUnit}
               className={cn(
                 "w-full py-3.75 rounded-[14px] text-[13px] font-bold tracking-[2px] uppercase transition-all",
                 selUnit
-                  ? "bg-linier-to-br from-[#1B5E35] to-[#2E7D52] text-[#F5F0E8] cursor-pointer shadow-[0_6px_24px_rgba(27,94,53,0.25)]"
+                  ? "bg-linear-to-br from-[#1B5E35] to-[#2E7D52] text-[#F5F0E8] cursor-pointer shadow-[0_6px_24px_rgba(27,94,53,0.25)]"
                   : "bg-[rgba(27,94,53,0.12)] text-[rgba(27,94,53,0.35)] cursor-not-allowed",
               )}
             >

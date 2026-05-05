@@ -332,16 +332,16 @@ export default function CustomScreen() {
           {/* Nav buttons */}
           <div className="flex gap-2.5 mt-4">
             <button
-              onClick={() => goTo("type")}
+              onClick={() => goTo("unit")}
               className="px-4 py-3 rounded-xl border-[1.5px] border-[rgba(27,94,53,0.18)] bg-transparent
                          text-xs font-semibold text-[#7A9480] transition-all
                          hover:bg-[rgba(27,94,53,0.06)]"
             >
-              ← Tipe
+              ← Kavling
             </button>
             <button
-              onClick={() => goTo("unit")}
-              className="flex-1 py-3 rounded-xl bg-linier-to-br from-[#1B5E35] to-[#2E7D52]
+              onClick={() => goTo("form")}
+              className="flex-1 py-3 rounded-xl bg-linear-to-br from-[#1B5E35] to-[#2E7D52]
                          text-[#F5F0E8] text-xs font-bold tracking-[2px] uppercase
                          shadow-[0_4px_20px_rgba(27,94,53,0.22)] transition-all hover:scale-[1.01]"
             >

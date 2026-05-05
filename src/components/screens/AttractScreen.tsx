@@ -46,7 +46,7 @@ function Logo({ size = 84 }: { size?: number }) {
 function GoldDivider() {
   return (
     <div className="flex items-center gap-3 w-70">
-      <div className="flex-1 h-px bg-linier-to-r from-transparent to-[#C9A84C]" />
+      <div className="flex-1 h-px bg-linear-to-r from-transparent to-[#C9A84C]" />
       <svg width="8" height="8" viewBox="0 0 8 8">
         <rect
           x="2"
@@ -57,7 +57,7 @@ function GoldDivider() {
           transform="rotate(45 4 4)"
         />
       </svg>
-      <div className="flex-1 h-px bg-linier-to-l from-transparent to-[#C9A84C]" />
+      <div className="flex-1 h-px bg-linear-to-l from-transparent to-[#C9A84C]" />
     </div>
   );
 }

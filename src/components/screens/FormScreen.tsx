@@ -303,7 +303,7 @@ export default function FormScreen() {
             <div className="flex gap-3 pt-1">
               <button
                 type="button"
-                onClick={() => goTo("unit")}
+                onClick={() => goTo("custom")}
                 className="px-5 py-3.5 rounded-xl border-[1.5px] border-[rgba(27,94,53,0.16)]
                            bg-transparent text-[12.5px] font-semibold text-[#7A9480]
                            transition-all hover:bg-[rgba(27,94,53,0.06)]"
@@ -317,7 +317,7 @@ export default function FormScreen() {
                   "flex-1 py-3.5 rounded-xl text-[13px] font-bold tracking-[2px] uppercase transition-all",
                   busy
                     ? "bg-[rgba(27,94,53,0.2)] text-[#7A9480] cursor-not-allowed"
-                    : "bg-linier-to-br from-[#1B5E35] to-[#2E7D52] text-[#F5F0E8] cursor-pointer shadow-[0_6px_24px_rgba(27,94,53,0.25)] hover:scale-[1.01]",
+                    : "bg-linear-to-br from-[#1B5E35] to-[#2E7D52] text-[#F5F0E8] cursor-pointer shadow-[0_6px_24px_rgba(27,94,53,0.25)] hover:scale-[1.01]",
                 )}
               >
                 {busy ? "Menyimpan…" : "🏠 Konfirmasi Booking →"}

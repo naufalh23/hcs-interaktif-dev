@@ -42,7 +42,7 @@ export const useStore = create<KioskStore>((set, get) => ({
   isLoading:     false,
 
   goTo:          (s)  => set({ screen: s }),
-  pickType:      (t)  => set({ houseType: t, unit: null, custom: { ...DEFAULT_CUSTOM, addons: {} }, screen: 'custom' }),
+  pickType:      (t)  => set({ houseType: t, unit: null, custom: { ...DEFAULT_CUSTOM, addons: {} }, screen: 'unit' }),
   pickUnit:      (u)  => set({ unit: u }),
   setCustom:     (p)  => set(s => ({ custom: { ...s.custom, ...p } })),
   toggleAddon:   (id) => set(s => ({

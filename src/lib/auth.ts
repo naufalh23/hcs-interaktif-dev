@@ -7,6 +7,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   secret: process.env.AUTH_SECRET,
   session: { strategy: "jwt" },
   pages:   { signIn: "/contentmanage/login" },
+  trustHost: true, // ← ini kuncinya, auto detect host dari request
   callbacks: {
     jwt({ token, user }) {
       if (user) {
@@ -17,7 +18,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     session({ session, token }) {
       if (token) {
-        session.user.id           = token.id   as string;
+        session.user.id            = token.id   as string;
         (session.user as any).role = token.role as string;
       }
       return session;

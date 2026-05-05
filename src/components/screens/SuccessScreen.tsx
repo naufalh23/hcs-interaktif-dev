@@ -29,11 +29,11 @@ function Logo({ size = 56 }: { size?: number }) {
 function GoldDivider({ width = 240 }: { width?: number }) {
   return (
     <div className="flex items-center gap-3" style={{ width }}>
-      <div className="flex-1 h-px bg-linier-to-r from-transparent to-[#C9A84C]" />
+      <div className="flex-1 h-px bg-linear-to-r from-transparent to-[#C9A84C]" />
       <svg width="8" height="8" viewBox="0 0 8 8">
         <rect x="2" y="0" width="4" height="4" fill="#C9A84C" transform="rotate(45 4 4)" />
       </svg>
-      <div className="flex-1 h-px bg-linier-to-l from-transparent to-[#C9A84C]" />
+      <div className="flex-1 h-px bg-linear-to-l from-transparent to-[#C9A84C]" />
     </div>
   );
 }
@@ -189,7 +189,7 @@ export default function SuccessScreen() {
         <button
           onClick={reset}
           className="inline-flex items-center gap-2 px-10 py-3.5 rounded-full
-                     bg-linier-to-br from-[#1B5E35] to-[#2E7D52]
+                     bg-linear-to-br from-[#1B5E35] to-[#2E7D52]
                      text-[#F5F0E8] text-xs font-bold tracking-[3px] uppercase
                      shadow-[0_8px_28px_rgba(27,94,53,0.28)] transition-all hover:scale-[1.03]"
         >

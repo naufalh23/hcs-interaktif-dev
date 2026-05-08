@@ -10,13 +10,15 @@ export async function proxy(req: NextRequest) {
 
   const token = await getToken({
     req,
-    secret: process.env.AUTH_SECRET,
-    // Auto detect secure cookie berdasarkan protokol request
+    secret:       process.env.AUTH_SECRET,
     secureCookie: req.nextUrl.protocol === "https:",
   });
 
-  if (!token) {
-    return NextResponse.redirect(new URL("/contentmanage/login", req.url));
+  // Tidak ada token atau token expired (tidak ada id)
+  if (!token || !token.id) {
+    const loginUrl = new URL("/contentmanage/login", req.url);
+    loginUrl.searchParams.set("reason", "expired");
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();

@@ -1,15 +1,24 @@
 "use client";
 
-import { useState } from "react";
-import { signIn }   from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { useState, useEffect, Suspense } from "react";
+import { signIn }                         from "next-auth/react";
+import { useRouter, useSearchParams }     from "next/navigation";
+import { toast }                          from "sonner";
 
-export default function LoginPage() {
-  const router = useRouter();
+function LoginForm() {
+  const router       = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy]         = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get("reason") === "expired") {
+      toast.warning("Sesi berakhir", {
+        description: "Silakan login kembali.",
+      });
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,9 +47,9 @@ export default function LoginPage() {
       <div className="w-full max-w-sm bg-[#F5F0E8] rounded-2xl p-8
                       shadow-[0_8px_40px_rgba(27,94,53,0.1)] border border-[rgba(27,94,53,0.1)]">
         <div className="text-center mb-8">
-          <div className="font-serif font-bold text-[28px] text-[#163F25]">H City Sawangan</div>
-          <div className="text-sm tracking-[3px] uppercase text-[#9AAD9C] font-semibold">
-            Kios-K CMS
+          <div className="font-serif font-bold text-[28px] text-[#163F25]">H City</div>
+          <div className="text-[10px] tracking-[3px] uppercase text-[#9AAD9C] font-semibold">
+            Content Manager
           </div>
         </div>
 
@@ -87,5 +96,14 @@ export default function LoginPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+// useSearchParams harus dibungkus Suspense di Next.js
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }

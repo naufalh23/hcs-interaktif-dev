@@ -6,7 +6,7 @@ import type { HouseType }                   from '@/data/house-types'
 import type { Unit }                        from '@/data/units'
 import type { PaymentMethod }               from '@/data/leads'
 
-export type Screen = 'attract' | 'type' | 'custom' | 'unit' | 'form' | 'success'
+export type Screen = 'attract' | 'cluster' | 'addon' | 'unit' | 'form' | 'success'
 
 interface KioskStore {
   screen:        Screen

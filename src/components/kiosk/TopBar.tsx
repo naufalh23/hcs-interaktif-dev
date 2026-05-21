@@ -7,17 +7,17 @@ import type { Screen } from "@/store/kiosk-store";
 import Image from "next/image";
 
 const STEPS: { key: Screen; label: string; n: number }[] = [
-  { key: "type", label: "Cluster", n: 1 },
+  { key: "cluster", label: "Cluster", n: 1 },
   { key: "unit", label: "Unit", n: 2 },
-  { key: "custom", label: "Kustomisasi", n: 3 },
+  { key: "addon", label: "Kustomisasi", n: 3 },
   { key: "form", label: "Pemesanan", n: 4 },
 ];
 
 const ORDER: Screen[] = [
   "attract",
-  "type",
+  "cluster",
   "unit",
-  "custom",
+  "addon",
   "form",
   "success",
 ];

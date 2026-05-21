@@ -10,28 +10,7 @@ import { cn, formatPrice } from "@/lib/utils";
 import { bookingSchema } from "@/lib/validations";
 import { AGENTS, WALK_IN } from "@/data/agents";
 import type { BookingSchema } from "@/lib/validations";
-import type { PaymentMethod } from "@/data/leads";
-
-const PAYMENT_OPTS: {
-  value: PaymentMethod;
-  label: string;
-  sub: string;
-  icon: string;
-}[] = [
-  { value: "KPR Bank", label: "KPR Bank", sub: "Free biaya KPR*", icon: "🏦" },
-  {
-    value: "Cash Keras",
-    label: "Cash Keras",
-    sub: "Diskon spesial",
-    icon: "💰",
-  },
-  {
-    value: "Cash Bertahap",
-    label: "Cash Bertahap",
-    sub: "12–24 bulan",
-    icon: "📅",
-  },
-];
+import { FORM_CONTENT } from "@/data/content/form-screen";
 
 export default function FormScreen() {
   const goTo = useStore((s) => s.goTo);
@@ -67,7 +46,7 @@ export default function FormScreen() {
           unitId: unit.id,
           unitCode: unit.code,
           houseTypeId: type.id,
-          houseTypeName: type.name,
+          houseTypeName: `Tipe ${type.types[0].buildingArea}/${type.types[0].landArea}`,
           clusterName: type.cluster,
           unitFacing: unit.facing,
           basePrice: unit.price,
@@ -107,13 +86,15 @@ export default function FormScreen() {
                           shadow-[0_3px_16px_rgba(27,94,53,0.07)]"
           >
             <div className="flex items-start gap-3 mb-4">
-              <span className="text-[38px]">{type.icon}</span>
+              <div className="w-10 h-10 rounded-xl bg-[rgba(27,94,53,0.1)] flex items-center justify-center text-[#1B5E35] shrink-0">
+                🏠
+              </div>
               <div>
                 <div className="text-[9px] tracking-[2px] uppercase font-bold text-[#1B5E35] mb-0.5">
                   {type.cluster}
                 </div>
                 <div className="font-serif font-semibold text-[20px] text-[#163F25] leading-[1.1]">
-                  {type.name}
+                  Tipe {type.types[0].buildingArea}/{type.types[0].landArea}
                 </div>
                 <div className="text-[11px] text-[#8A9E8C] mt-px">
                   Kavling {unit.code}
@@ -123,10 +104,10 @@ export default function FormScreen() {
 
             <div className="border-t border-[rgba(27,94,53,0.1)] pt-3 mb-1">
               {[
-                ["Kavling", unit.code],
-                ["Arah Hadap", unit.facing],
-                ["Lantai", `${type.floors} Lantai`],
-                ["LB / LT", `${type.buildingArea}m² / ${type.landArea}m²`],
+                [FORM_CONTENT.orderSummary.kavlingLabel, unit.code],
+                [FORM_CONTENT.orderSummary.facingLabel,  unit.facing],
+                [FORM_CONTENT.orderSummary.floorsLabel,  `${unit.floors} Lantai`],
+                [FORM_CONTENT.orderSummary.areaLabel,    `${type.types[0].buildingArea}m² / ${type.types[0].landArea}m²`],
               ].map(([l, v]) => (
                 <div key={l} className="flex justify-between py-1.5">
                   <span className="text-[11px] text-[#8A9E8C]">{l}</span>
@@ -139,7 +120,7 @@ export default function FormScreen() {
 
             <div className="border-t border-dashed border-[rgba(27,94,53,0.12)] pt-2.5 mt-1">
               <div className="flex justify-between py-1">
-                <span className="text-[11px] text-[#8A9E8C]">Harga Dasar</span>
+                <span className="text-[11px] text-[#8A9E8C]">{FORM_CONTENT.orderSummary.basePriceLabel}</span>
                 <span className="text-[11px] font-semibold text-[#4A6A55]">
                   {formatPrice(unit.price)}
                 </span>
@@ -147,7 +128,7 @@ export default function FormScreen() {
               {extra > 0 && (
                 <div className="flex justify-between py-1">
                   <span className="text-[11px] text-[#8A9E8C]">
-                    Kustomisasi
+                    {FORM_CONTENT.orderSummary.customLabel}
                   </span>
                   <span className="text-[11px] font-semibold text-[#8B6A00]">
                     +{formatPrice(extra)}
@@ -159,14 +140,14 @@ export default function FormScreen() {
                               border-t-[1.5px] border-[rgba(27,94,53,0.1)]"
               >
                 <span className="text-[10px] font-bold text-[#163F25] uppercase tracking-[1px]">
-                  Total Estimasi
+                  {FORM_CONTENT.orderSummary.totalLabel}
                 </span>
                 <span className="font-serif font-bold text-[24px] text-[#163F25]">
                   {formatPrice(total)}
                 </span>
               </div>
               <div className="text-[9.5px] text-[#9AAD9C] text-right mt-0.5">
-                Belum termasuk notaris &amp; pajak
+                {FORM_CONTENT.orderSummary.taxNote}
               </div>
             </div>
           </div>
@@ -174,10 +155,10 @@ export default function FormScreen() {
           {/* Payment method */}
           <div>
             <div className="text-[9.5px] tracking-[2.5px] uppercase font-bold text-[#9AAD9C] mb-2">
-              Metode Pembayaran
+              {FORM_CONTENT.paymentLabel}
             </div>
             <div className="flex flex-col gap-2">
-              {PAYMENT_OPTS.map((o) => (
+              {FORM_CONTENT.paymentOptions.map((o) => (
                 <button
                   key={o.value}
                   type="button"
@@ -221,10 +202,9 @@ export default function FormScreen() {
             className="flex items-center gap-2.5 rounded-xl px-4 py-3 mb-6
                           bg-[rgba(201,168,76,0.1)] border border-[rgba(201,168,76,0.3)]"
           >
-            <span className="text-base">🎁</span>
+            <span className="text-base">{FORM_CONTENT.promoBanner.icon}</span>
             <div className="text-[12px] font-medium text-[#7A5A00]">
-              <strong>Promo All-In 5Jt</strong> — Free Biaya KPR, BPHTB &amp;
-              AJB! Terbatas.
+              <strong>{FORM_CONTENT.promoBanner.boldText}</strong> — {FORM_CONTENT.promoBanner.detail}
             </div>
           </div>
 
@@ -232,7 +212,7 @@ export default function FormScreen() {
             className="text-[10px] tracking-[2.5px] uppercase font-bold text-[#9AAD9C]
                           mb-4 pb-3 border-b border-[rgba(27,94,53,0.1)]"
           >
-            Data Diri Pemesan
+            {FORM_CONTENT.sectionLabel}
           </div>
 
           <form
@@ -240,37 +220,37 @@ export default function FormScreen() {
             className="flex flex-col gap-4"
           >
             <div className="grid grid-cols-2 gap-3.5 text-black">
-              <Field label="Nama Lengkap *" err={errors.fullName?.message}>
+              <Field label={FORM_CONTENT.fields.fullName.label} err={errors.fullName?.message}>
                 <input
                   {...register("fullName")}
-                  placeholder="Nama sesuai KTP"
+                  placeholder={FORM_CONTENT.fields.fullName.placeholder}
                   className={inp(!!errors.fullName)}
                 />
               </Field>
-              <Field label="No. HP / WhatsApp *" err={errors.phone?.message}>
+              <Field label={FORM_CONTENT.fields.phone.label} err={errors.phone?.message}>
                 <input
                   {...register("phone")}
-                  placeholder="08xx xxxx xxxx"
+                  placeholder={FORM_CONTENT.fields.phone.placeholder}
                   className={inp(!!errors.phone)}
                 />
               </Field>
             </div>
 
-            <Field label="Email" err={errors.email?.message}>
+            <Field label={FORM_CONTENT.fields.email.label} err={errors.email?.message}>
               <div className="text-black">
                 <input
                   {...register("email")}
                   type="email"
-                  placeholder="nama@email.com (opsional)"
+                  placeholder={FORM_CONTENT.fields.email.placeholder}
                   className={inp(!!errors.email)}
                 />
               </div>
             </Field>
 
             <div className="grid grid-cols-2 gap-3.5 text-black">
-              <Field label="Marketing Agent">
+              <Field label={FORM_CONTENT.fields.agentCode.label}>
                 <select {...register("agentCode")} className={inp(false)}>
-                  <option value="">— Pilih Agent —</option>
+                  <option value="">{FORM_CONTENT.fields.agentCode.placeholder}</option>
                   {AGENTS.map((a) => (
                     <option key={a.id} value={a.code}>
                       {a.name}
@@ -279,10 +259,10 @@ export default function FormScreen() {
                   <option value={WALK_IN.code}>{WALK_IN.name}</option>
                 </select>
               </Field>
-              <Field label="Domisili">
+              <Field label={FORM_CONTENT.fields.domicile.label}>
                 <input
                   {...register("domicile")}
-                  placeholder="Kota / Kabupaten"
+                  placeholder={FORM_CONTENT.fields.domicile.placeholder}
                   className={inp(false)}
                 />
               </Field>
@@ -293,17 +273,13 @@ export default function FormScreen() {
               className="rounded-xl p-4 text-[11.5px] text-[#7A9480] leading-relaxed
                             bg-[rgba(27,94,53,0.06)] border border-[rgba(27,94,53,0.12)]"
             >
-              ⚠️ Form ini adalah{" "}
-              <strong className="text-[#4A6A55]">registrasi minat</strong>,
-              bukan pembelian resmi. Tim H City Sawangan akan menghubungi Anda
-              di <strong className="text-[#4A6A55]">+62 811 1130 114</strong>{" "}
-              dalam 1×24 jam.
+              {FORM_CONTENT.disclaimer.icon} {FORM_CONTENT.disclaimer.text}
             </div>
 
             <div className="flex gap-3 pt-1">
               <button
                 type="button"
-                onClick={() => goTo("custom")}
+                onClick={() => goTo("addon")}
                 className="px-5 py-3.5 rounded-xl border-[1.5px] border-[rgba(27,94,53,0.16)]
                            bg-transparent text-[12.5px] font-semibold text-[#7A9480]
                            transition-all hover:bg-[rgba(27,94,53,0.06)]"

@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 import { useStore } from "@/store/kiosk-store";
 import { formatPrice } from "@/lib/utils";
+import { SUCCESS_CONTENT } from "@/data/content/success-screen";
+import { BRAND } from "@/data/content/shared";
 
 const CF_COLORS = [
   "#1B5E35", "#2E7D52", "#4CAF78", "#C9A84C",
@@ -107,10 +109,10 @@ export default function SuccessScreen() {
           <Logo size={52} />
           <div>
             <div className="font-serif font-bold text-[17px] tracking-[3px] text-[#163F25]">
-              H City <span className="text-[#1B5E35]">Sawangan</span>
+              {BRAND.nameShort} <span className="text-[#1B5E35]">{BRAND.nameSuffix}</span>
             </div>
             <div className="text-[8.5px] tracking-[3px] text-[#9AAD9C] uppercase font-semibold">
-              Marketing Gallery
+              {BRAND.marketingGalleryLabel}
             </div>
           </div>
         </div>
@@ -121,15 +123,15 @@ export default function SuccessScreen() {
         <div className="flex items-center justify-center mt-6 mb-4 animate-pop-in
                         size-22 rounded-full text-[42px]
                         bg-[rgba(27,94,53,0.08)] border-2 border-[rgba(27,94,53,0.2)]">
-          🏠
+          {SUCCESS_CONTENT.icon}
         </div>
 
         <h1 className="font-serif font-light text-[52px] text-[#163F25] leading-[0.9] mb-2.5">
-          Booking{" "}
-          <em className="text-[#1B5E35] italic">Berhasil!</em>
+          {SUCCESS_CONTENT.heading.prefix}{" "}
+          <em className="text-[#1B5E35] italic">{SUCCESS_CONTENT.heading.em}</em>
         </h1>
         <p className="text-[13px] text-[#7A9480] mb-6">
-          Terima kasih! Hunian impian Anda satu langkah lebih dekat.
+          {SUCCESS_CONTENT.subtitle}
         </p>
 
         {/* Ticket */}
@@ -144,7 +146,7 @@ export default function SuccessScreen() {
 
           <div className="px-10 py-6">
             <div className="text-[9px] tracking-[4px] uppercase font-bold text-[#9AAD9C] mb-1.5">
-              Kode Booking
+              {SUCCESS_CONTENT.ticket.bookingCodeLabel}
             </div>
             <div className="font-serif font-bold text-[44px] tracking-[8px] text-[#1B5E35] leading-none mb-4">
               {code ?? "—"}
@@ -154,9 +156,9 @@ export default function SuccessScreen() {
             <div className="border-t-[1.5px] border-dashed border-[rgba(201,168,76,0.3)] pt-3.5">
               <div className="grid grid-cols-3 gap-4">
                 {[
-                  ["Unit",  unit?.code    ?? "—"],
-                  ["Tipe",  type?.name    ?? "—"],
-                  ["Bayar", payment       ?? "—"],
+                  [SUCCESS_CONTENT.ticket.unitLabel,    unit?.code ?? "—"],
+                  [SUCCESS_CONTENT.ticket.typeLabel,    type ? `Tipe ${type.types[0].buildingArea}/${type.types[0].landArea}` : "—"],
+                  [SUCCESS_CONTENT.ticket.paymentLabel, payment    ?? "—"],
                 ].map(([l, v]) => (
                   <div key={l} className="text-center">
                     <div className="text-[13.5px] font-bold text-[#163F25] mb-0.5">{v}</div>
@@ -166,7 +168,7 @@ export default function SuccessScreen() {
               </div>
               {total > 0 && (
                 <div className="mt-4 pt-4 text-center border-t border-[rgba(27,94,53,0.1)]">
-                  <div className="text-[9.5px] text-[#8A9E8C] mb-0.5">Total Estimasi</div>
+                  <div className="text-[9.5px] text-[#8A9E8C] mb-0.5">{SUCCESS_CONTENT.ticket.totalLabel}</div>
                   <div className="font-serif font-bold text-[22px] text-[#1B5E35]">
                     {formatPrice(total)}
                   </div>
@@ -179,10 +181,10 @@ export default function SuccessScreen() {
         {/* WA info */}
         <div className="w-full rounded-xl px-5 py-3 mb-6 flex items-center gap-2.5
                         bg-[rgba(27,94,53,0.07)] border border-[rgba(27,94,53,0.14)]">
-          <span className="text-base">📞</span>
+          <span className="text-base">{SUCCESS_CONTENT.contact.icon}</span>
           <p className="text-[12px] text-[#7A9480]">
-            Tim kami akan menghubungi Anda via WhatsApp:{" "}
-            <strong className="text-[#1B5E35]">+62 811 1130 114</strong>
+            {SUCCESS_CONTENT.contact.text}{" "}
+            <strong className="text-[#1B5E35]">{SUCCESS_CONTENT.contact.phone}</strong>
           </p>
         </div>
 
@@ -197,7 +199,7 @@ export default function SuccessScreen() {
         </button>
 
         <p className="text-[9.5px] text-[#B0BEB2] mt-3.5">
-          Halaman akan kembali otomatis dalam beberapa saat
+          {SUCCESS_CONTENT.autoResetNote}
         </p>
       </div>
     </div>

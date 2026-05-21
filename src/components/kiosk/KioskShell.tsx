@@ -3,13 +3,13 @@
 import { useEffect, useRef } from "react";
 import { useStore } from "@/store/kiosk-store";
 import AttractScreen from "@/components/screens/AttractScreen";
-import TypeScreen from "@/components/screens/TypeScreen";
-import CustomScreen from "@/components/screens/CustomScreen";
 import UnitScreen from "@/components/screens/UnitScreen";
 import FormScreen from "@/components/screens/FormScreen";
 import SuccessScreen from "@/components/screens/SuccessScreen";
 import IdleOverlay from "@/components/kiosk/IdleOverlay";
 import type { HouseType } from "@/data/house-types";
+import ClusterScreen from "../screens/ClusterScreen";
+import AddonScreen from "../screens/AddonScreen";
 
 const IDLE_MS = 3600_000; // 90 detik
 
@@ -50,9 +50,9 @@ export default function KioskShell({
   return (
     <div className="relative w-full h-full overflow-hidden bg-ink">
       {screen === "attract" && <AttractScreen />}
-      {screen === "type" && <TypeScreen houseTypes={houseTypes} />}
+      {screen === "cluster" && <ClusterScreen houseTypes={houseTypes} />}
       {screen === "unit" && <UnitScreen />}
-      {screen === "custom" && <CustomScreen />}
+      {screen === "addon" && <AddonScreen />}
       {screen === "form" && <FormScreen />}
       {screen === "success" && <SuccessScreen />}
       <IdleOverlay idleMs={IDLE_MS} />

@@ -6,15 +6,12 @@ import { useStore } from "@/store/kiosk-store";
 import { cn, formatPrice } from "@/lib/utils";
 import { UNITS } from "@/data/units";
 import type { Unit } from "@/data/units";
+import { UNIT_CONTENT } from "@/data/content/unit-screen";
 
 const STATUS: Record<string, { dot: string; bg: string; label: string }> = {
-  available: { dot: "#22A85A", bg: "rgba(34,168,90,0.12)", label: "Tersedia" },
-  indent: {
-    dot: "#C9780A",
-    bg: "rgba(201,120,10,0.1)",
-    label: "Inden / Proses",
-  },
-  sold: { dot: "#B03030", bg: "rgba(176,48,48,0.08)", label: "Terjual" },
+  available: { dot: "#22A85A", bg: "rgba(34,168,90,0.12)",   label: UNIT_CONTENT.statusLabels.available },
+  indent:    { dot: "#C9780A", bg: "rgba(201,120,10,0.1)",   label: UNIT_CONTENT.statusLabels.indent    },
+  sold:      { dot: "#B03030", bg: "rgba(176,48,48,0.08)",   label: UNIT_CONTENT.statusLabels.sold      },
 };
 
 export default function UnitScreen() {
@@ -46,7 +43,7 @@ export default function UnitScreen() {
           {/* Filter blok */}
           <div>
             <div className="text-[9.5px] tracking-[3px] uppercase font-bold text-[#9AAD9C] mb-2">
-              Filter Blok
+              {UNIT_CONTENT.sidebar.filterLabel}
             </div>
             <div className="flex flex-col gap-1.5">
               {blocks.map((b) => {
@@ -69,7 +66,7 @@ export default function UnitScreen() {
                     )}
                   >
                     <span className="capitalize">
-                      {b === "all" ? "Semua Blok" : b}
+                      {b === "all" ? UNIT_CONTENT.sidebar.allBlocksLabel : b}
                     </span>
                     <span
                       className="rounded-lg px-1.5 py-0.5 text-[9.5px] font-bold
@@ -86,7 +83,7 @@ export default function UnitScreen() {
           {/* Legenda */}
           <div>
             <div className="text-[9.5px] tracking-[3px] uppercase font-bold text-[#9AAD9C] mb-2">
-              Keterangan
+              {UNIT_CONTENT.sidebar.legendLabel}
             </div>
             {Object.entries(STATUS).map(([k, v]) => (
               <div key={k} className="flex items-center gap-2.5 py-1.5">
@@ -105,19 +102,19 @@ export default function UnitScreen() {
                           bg-[rgba(27,94,53,0.07)] border border-[rgba(27,94,53,0.12)]"
           >
             <div className="text-[9px] tracking-[2px] uppercase font-bold text-[#9AAD9C] mb-1.5">
-              Tipe Dipilih
+              {UNIT_CONTENT.sidebar.selectedTypeLabel}
             </div>
             <div className="font-serif font-semibold text-[17px] text-[#163F25] mb-0.5">
-              {type.name}
+              Tipe {type.types[0].buildingArea}/{type.types[0].landArea}
             </div>
             <div className="text-[11px] text-[#7A9480]">{type.cluster}</div>
             <div className="text-[11px] text-[#9AAD9C] mt-0.5">
-              LB {type.buildingArea}m² · LT {type.landArea}m²
+              LB {type.types[0].buildingArea}m² · LT {type.types[0].landArea}m²
             </div>
           </div>
 
           <button
-            onClick={() => goTo("type")}
+            onClick={() => goTo("cluster")}
             className="w-full py-2.75 rounded-xl border-[1.5px] border-[rgba(27,94,53,0.16)]
                        bg-transparent text-xs font-semibold text-[#7A9480]
                        transition-all hover:bg-[rgba(27,94,53,0.06)]"
@@ -130,10 +127,11 @@ export default function UnitScreen() {
         <div className="flex-1 p-6 overflow-y-auto flex flex-col gap-5">
           <div>
             <h1 className="font-serif font-light text-[36px] text-[#163F25] leading-[1.1] mb-1">
-              Pilih <em className="text-[#1B5E35] italic">Kavling</em>
+              {UNIT_CONTENT.heading.prefix}{" "}
+              <em className="text-[#1B5E35] italic">{UNIT_CONTENT.heading.em}</em>
             </h1>
             <p className="text-[12px] text-[#7A9480]">
-              {type.cluster} · {type.name} ·{" "}
+              {type.cluster} · Tipe {type.types[0].buildingArea}/{type.types[0].landArea} ·{" "}
               <strong className="text-[#1B5E35]">{avail} unit tersedia</strong>
             </p>
           </div>
@@ -151,7 +149,7 @@ export default function UnitScreen() {
 
           <div className="mt-auto pt-2">
             <button
-              onClick={() => selUnit && goTo("custom")}
+              onClick={() => selUnit && goTo("addon")}
               disabled={!selUnit}
               className={cn(
                 "w-full py-3.75 rounded-[14px] text-[13px] font-bold tracking-[2px] uppercase transition-all",
@@ -162,7 +160,7 @@ export default function UnitScreen() {
             >
               {selUnit
                 ? `Lanjut Pesan — Kavling ${selUnit.code} →`
-                : "Pilih unit terlebih dahulu"}
+                : UNIT_CONTENT.emptySelection}
             </button>
           </div>
         </div>

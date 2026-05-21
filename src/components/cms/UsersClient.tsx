@@ -22,25 +22,16 @@ type Form = {
   role: "USER" | "ADMIN";
 };
 
-const EMPTY: Form = {
-  name: "",
-  email: "",
-  password: "",
-  role: "USER",
-};
+const EMPTY: Form = { name: "", email: "", password: "", role: "USER" };
 
 export default function UsersClient() {
   const [users, setUsers] = useState<User[]>([]);
-
   const [modal, setModal] = useState<"create" | "edit" | null>(null);
   const [selected, setSelected] = useState<User | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<User | null>(null);
-
   const [form, setForm] = useState<Form>(EMPTY);
-
   const [busy, setBusy] = useState(false);
 
-  // ================= LOAD DATA =================
   const load = async () => {
     try {
       const res = await fetch("/api/users");
@@ -51,55 +42,36 @@ export default function UsersClient() {
     }
   };
 
-  useEffect(() => {
-    load();
-  }, []);
+  useEffect(() => { load(); }, []);
 
-  // ================= CREATE =================
   const openCreate = () => {
     setForm(EMPTY);
     setSelected(null);
     setModal("create");
   };
 
-  // ================= EDIT =================
   const openEdit = (u: User) => {
     setSelected(u);
-    setForm({
-      name: u.name,
-      email: u.email,
-      password: "",
-      role: u.role,
-    });
+    setForm({ name: u.name, email: u.email, password: "", role: u.role });
     setModal("edit");
   };
 
-  // ================= SUBMIT =================
   const submit = async () => {
     setBusy(true);
-
     const isCreate = modal === "create";
-    const toastId = toast.loading(
-      isCreate ? "Membuat akun…" : "Menyimpan perubahan…",
-    );
-
+    const toastId = toast.loading(isCreate ? "Membuat akun…" : "Menyimpan perubahan…");
     try {
       const res = await fetch("/api/users", {
         method: isCreate ? "POST" : "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(isCreate ? form : { ...form, id: selected?.id }),
       });
-
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Gagal");
-
       toast.success(
-        isCreate
-          ? `Akun "${form.name}" berhasil dibuat`
-          : `Akun "${form.name}" berhasil diperbarui`,
+        isCreate ? `Akun "${form.name}" berhasil dibuat` : `Akun "${form.name}" berhasil diperbarui`,
         { id: toastId },
       );
-
       setModal(null);
       load();
     } catch (e) {
@@ -112,26 +84,18 @@ export default function UsersClient() {
     }
   };
 
-  // ================= DELETE =================
   const handleDelete = async () => {
     if (!confirmDelete) return;
-
     const toastId = toast.loading(`Menghapus "${confirmDelete.name}"…`);
-
     try {
       const res = await fetch("/api/users", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: confirmDelete.id }),
       });
-
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Gagal");
-
-      toast.success(`"${confirmDelete.name}" berhasil dihapus`, {
-        id: toastId,
-      });
-
+      toast.success(`"${confirmDelete.name}" berhasil dihapus`, { id: toastId });
       setConfirmDelete(null);
       load();
     } catch (e) {
@@ -143,20 +107,38 @@ export default function UsersClient() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto flex flex-col gap-6">
+    /*
+     * ─── LAYOUT NOTE ────────────────────────────────────────────────────────
+     * Parent layout sudah membungkus dengan:
+     *   <div className="flex min-h-screen">
+     *     <CmsNav />
+     *     <main className="flex-1 min-w-0 overflow-y-auto p-6">   ← kunci
+     *       {children}
+     *     </main>
+     *   </div>
+     *
+     * "min-w-0" pada <main> mencegah konten mendorong sidebar keluar layar.
+     * "overflow-y-auto" mengurung scroll di dalam area konten, bukan window.
+     * Komponen ini TIDAK perlu set width sendiri — cukup ikut flex parent.
+     * ────────────────────────────────────────────────────────────────────────
+     */
+    <div className="flex flex-col gap-6 w-full min-w-0">
+
       {/* HEADER */}
-      <div className="flex items-end justify-between">
-        <div>
-          <h1 className="font-serif text-[30px] text-[#163F25]">Kelola Akun</h1>
-          <p className="text-sm text-[#7A9480]">
+      <div className="flex items-end justify-between gap-4">
+        <div className="min-w-0">
+          <h1 className="font-serif text-[26px] leading-tight text-[#163F25] truncate">
+            Kelola Akun
+          </h1>
+          <p className="text-sm text-[#7A9480] mt-0.5">
             Buat dan kelola akun pengguna CMS.
           </p>
         </div>
 
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl 
-                     bg-linear-to-br from-[#1B5E35] to-[#2E7D52]
+          className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl
+                     bg-gradient-to-br from-[#1B5E35] to-[#2E7D52]
                      text-white text-sm font-semibold
                      shadow-md hover:scale-[1.03] transition"
         >
@@ -165,12 +147,14 @@ export default function UsersClient() {
         </button>
       </div>
 
-      {/* TABLE */}
-      <UsersTable
-        users={users}
-        onEdit={openEdit}
-        onDelete={(u) => setConfirmDelete(u)}
-      />
+      {/* TABLE — overflow-x-auto agar tabel bisa scroll horizontal di layar sempit */}
+      <div className="w-full overflow-x-auto rounded-xl">
+        <UsersTable
+          users={users}
+          onEdit={openEdit}
+          onDelete={(u) => setConfirmDelete(u)}
+        />
+      </div>
 
       {/* FORM MODAL */}
       <UserFormModal

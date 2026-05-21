@@ -67,7 +67,7 @@ export default function ContentPage() {
       {groups.map(group => (
         <div key={group}
           className="bg-[#F5F0E8] rounded-2xl p-5 border border-[rgba(27,94,53,0.1)]">
-          <div className="text-[9px] tracking-[3px] uppercase font-bold text-[#9AAD9C] mb-4 capitalize">
+          <div className="text-[9px] tracking-[3px] uppercase font-bold text-[#9AAD9C] mb-4">
             {group}
           </div>
           <div className="flex flex-col gap-4">
@@ -97,7 +97,7 @@ export default function ContentPage() {
                           ? "bg-[rgba(27,94,53,0.08)] text-[rgba(27,94,53,0.35)] cursor-not-allowed"
                           : !isDirty
                             ? "bg-[rgba(27,94,53,0.06)] text-[rgba(27,94,53,0.25)] cursor-not-allowed"
-                            : "bg-gradient-to-br from-[#1B5E35] to-[#2E7D52] text-[#F5F0E8] shadow-[0_4px_12px_rgba(27,94,53,0.2)] hover:scale-[1.02]"
+                            : "bg-linear-to-br from-[#1B5E35] to-[#2E7D52] text-[#F5F0E8] shadow-[0_4px_12px_rgba(27,94,53,0.2)] hover:scale-[1.02]"
                       }`}
                     >
                       {saving === c.id ? "…" : "Simpan"}

@@ -48,7 +48,6 @@ export default function FormScreen() {
           houseTypeId: type.id,
           houseTypeName: `Tipe ${type.types[0].buildingArea}/${type.types[0].landArea}`,
           clusterName: type.cluster,
-          unitFacing: unit.facing,
           basePrice: unit.price,
           totalPrice: total,
           customization: custom,
@@ -105,7 +104,6 @@ export default function FormScreen() {
             <div className="border-t border-[rgba(27,94,53,0.1)] pt-3 mb-1">
               {[
                 [FORM_CONTENT.orderSummary.kavlingLabel, unit.code],
-                [FORM_CONTENT.orderSummary.facingLabel,  unit.facing],
                 [FORM_CONTENT.orderSummary.floorsLabel,  `${unit.floors} Lantai`],
                 [FORM_CONTENT.orderSummary.areaLabel,    `${type.types[0].buildingArea}m² / ${type.types[0].landArea}m²`],
               ].map(([l, v]) => (
@@ -197,6 +195,17 @@ export default function FormScreen() {
 
         {/* ── Right form ──────────────────────────────── */}
         <div className="flex-1 p-8 overflow-y-auto">
+          {/* Step + heading */}
+          <div className="mb-5">
+            <div className="text-[9.5px] tracking-[3px] uppercase font-bold text-[#9AAD9C] mb-1">
+              {FORM_CONTENT.stepLabel}
+            </div>
+            <h1 className="font-serif font-light text-[30px] text-[#163F25] leading-tight mb-0.5">
+              {FORM_CONTENT.heading}
+            </h1>
+            <p className="text-[11px] text-[#7A9480]">{FORM_CONTENT.subtitle}</p>
+          </div>
+
           {/* Promo banner */}
           <div
             className="flex items-center gap-2.5 rounded-xl px-4 py-3 mb-6

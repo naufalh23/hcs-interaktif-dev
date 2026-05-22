@@ -1,16 +1,15 @@
 export const ADDON_CONTENT = {
-  previewLabel: "Preview Rumah",
+  stepLabel: "Langkah 3 dari 4",
+  heading:   "Pilih Addon",
+  subtitle:  "Tambah fasilitas sesuai kebutuhan Anda",
+
+  selectedAddonLabel: "Addon Dipilih",
+  emptyAddon:         "Belum ada addon dipilih.",
   priceBreakdown: {
-    title: "Estimasi Harga",
+    title:          "Estimasi Harga",
     basePriceLabel: "Harga Dasar",
-    customLabel: "Kustomisasi",
-    totalLabel: "Total",
+    addonLabel:     "Addon",
+    totalLabel:     "Total",
   },
-  sections: [
-    { key: "roofStyle",    icon: "🏗",  title: "Model Atap",          sub: "Desain atap mempengaruhi kesan rumah" },
-    { key: "colorIndex",   icon: "🎨",  title: "Warna Eksterior",     sub: "Pilih warna cat dinding luar"         },
-    { key: "doorStyle",    icon: "🚪",  title: "Model Pintu",         sub: "Kesan pertama hunian Anda"            },
-    { key: "windowStyle",  icon: "🪟",  title: "Tipe Jendela",        sub: "Pencahayaan & sirkulasi udara"        },
-    { key: "addons",       icon: "⚡",  title: "Fasilitas Tambahan",  sub: "Upgrade hunian Anda (bisa multi-pilih)" },
-  ],
+  sectionLabel: "Fasilitas Tambahan",
 } as const;

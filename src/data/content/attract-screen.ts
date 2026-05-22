@@ -1,16 +1,15 @@
 export const ATTRACT_CONTENT = {
+  stepLabel: "",
+  heading:   "Temukan Hunian Impian Anda",
+  subtitle:  "A Home To Live",
+
   images: {
-    logo: "/Logo-HCS.png",
+    logo:       "/Logo-HCS.png",
     background: "/bg-landing.png",
   },
   pillars: {
-    left: "",
+    left:  "",
     right: "",
-  },
-  headline: {
-    line1: "Temukan Hunian",
-    em: "Impian",
-    line2: "Anda",
   },
   stats: [
     { value: "7",   label: "Cluster"   },

@@ -5,6 +5,7 @@ import { useStore } from "@/store/kiosk-store";
 import { cn, formatPrice } from "@/lib/utils";
 import { ADDON_OPTIONS } from "@/data/customization";
 import type { AddonOption } from "@/data/customization";
+import { ADDON_CONTENT } from "@/data/content/addon-screen";
 import {
   IoConstructOutline,
   IoColorPaletteOutline,
@@ -15,13 +16,13 @@ import {
 } from "react-icons/io5";
 import type { IconType } from "react-icons";
 
-const ADDON_ICONS: Record<string, IconType> = {
-  pre_ac:    IoConstructOutline,
-  cat:       IoColorPaletteOutline,
-  smartlock: IoLockClosedOutline,
-  ac1pk:     IoSnowOutline,
-  ac05pk:    IoSnowOutline,
-  solar:     IoSunnyOutline,
+const ADDON_ICONS: Record<number, IconType> = {
+  1: IoConstructOutline,
+  2: IoColorPaletteOutline,
+  3: IoLockClosedOutline,
+  4: IoSnowOutline,
+  5: IoSnowOutline,
+  6: IoSunnyOutline,
 };
 
 export default function AddonScreen() {
@@ -43,20 +44,20 @@ export default function AddonScreen() {
         <div className="w-72 shrink-0 flex flex-col p-6 gap-4 bg-[#F5F0E8] border-r border-[rgba(27,94,53,0.1)] overflow-y-auto">
           <div>
             <div className="text-[9.5px] tracking-[3px] uppercase font-bold text-[#9AAD9C] mb-1">
-              Langkah 3 dari 4
+              {ADDON_CONTENT.stepLabel}
             </div>
             <div className="font-serif font-light text-[26px] text-[#163F25] leading-tight">
-              Pilih <em className="italic text-[#1B5E35]">Addon</em>
+              {ADDON_CONTENT.heading}
             </div>
             <p className="text-[11px] text-[#7A9480] mt-1">
-              {type.cluster} · {type.types[0].buildingArea}/{type.types[0].landArea}
+              {ADDON_CONTENT.subtitle}
             </p>
           </div>
 
           {/* Addon yang dipilih */}
           <div className="flex-1">
             {ADDON_OPTIONS.filter((a) => custom.addons[a.id]).length === 0 ? (
-              <p className="text-[11px] text-[#9AAD9C] italic">Belum ada addon dipilih.</p>
+              <p className="text-[11px] text-[#9AAD9C] italic">{ADDON_CONTENT.emptyAddon}</p>
             ) : (
               <div className="flex flex-col gap-1.5">
                 {ADDON_OPTIONS.filter((a) => custom.addons[a.id]).map((a) => (
@@ -74,20 +75,20 @@ export default function AddonScreen() {
           {/* Harga */}
           <div className="rounded-2xl p-4 border border-[rgba(27,94,53,0.1)] bg-[#FDFAF4]">
             <div className="text-[9px] tracking-[2.5px] uppercase font-bold text-[#9AAD9C] mb-2">
-              Estimasi Harga
+              {ADDON_CONTENT.priceBreakdown.title}
             </div>
             <div className="flex justify-between mb-1">
-              <span className="text-[11px] text-[#7A9480]">Harga Dasar</span>
+              <span className="text-[11px] text-[#7A9480]">{ADDON_CONTENT.priceBreakdown.basePriceLabel}</span>
               <span className="text-[11px] font-semibold text-[#4A6A55]">{formatPrice(type.basePrice)}</span>
             </div>
             {extra > 0 && (
               <div className="flex justify-between mb-1">
-                <span className="text-[11px] text-[#7A9480]">Addon</span>
+                <span className="text-[11px] text-[#7A9480]">{ADDON_CONTENT.priceBreakdown.addonLabel}</span>
                 <span className="text-[11px] font-semibold text-[#8B6A00]">+{formatPrice(extra)}</span>
               </div>
             )}
             <div className="border-t border-dashed border-[rgba(27,94,53,0.14)] mt-2 pt-2 flex justify-between items-baseline">
-              <span className="text-[10.5px] font-bold text-[#163F25] uppercase tracking-[1px]">Total</span>
+              <span className="text-[10.5px] font-bold text-[#163F25] uppercase tracking-[1px]">{ADDON_CONTENT.priceBreakdown.totalLabel}</span>
               <span className="font-serif font-bold text-[20px] text-[#163F25]">{formatPrice(total)}</span>
             </div>
           </div>
@@ -115,7 +116,7 @@ export default function AddonScreen() {
         {/* ── Right: addon cards ─────────────────────────── */}
         <div className="flex-1 overflow-y-auto p-7">
           <div className="text-[9.5px] tracking-[3px] uppercase font-bold text-[#9AAD9C] mb-4">
-            Fasilitas Tambahan
+            {ADDON_CONTENT.sectionLabel}
           </div>
           <div className="grid grid-cols-2 gap-3">
             {ADDON_OPTIONS.map((a) => (

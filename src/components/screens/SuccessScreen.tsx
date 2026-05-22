@@ -127,8 +127,7 @@ export default function SuccessScreen() {
         </div>
 
         <h1 className="font-serif font-light text-[52px] text-[#163F25] leading-[0.9] mb-2.5">
-          {SUCCESS_CONTENT.heading.prefix}{" "}
-          <em className="text-[#1B5E35] italic">{SUCCESS_CONTENT.heading.em}</em>
+          {SUCCESS_CONTENT.heading}
         </h1>
         <p className="text-[13px] text-[#7A9480] mb-6">
           {SUCCESS_CONTENT.subtitle}

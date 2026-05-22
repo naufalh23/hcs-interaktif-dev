@@ -13,7 +13,7 @@ export type PaymentMethod = 'KPR Bank' | 'Cash Keras' | 'Cash Bertahap'
 export type LeadStatus    = 'new' | 'contacted' | 'negotiating' | 'booked' | 'cancelled'
 
 export interface Lead {
-  id:            string
+  id:            number
   bookingCode:   string
   createdAt:     string
   // Data pemesan
@@ -26,7 +26,6 @@ export interface Lead {
   unitCode:      string
   houseTypeName: string
   clusterName:   string
-  unitFacing:    string
   // Harga
   basePrice:     number
   extraPrice:    number
@@ -43,6 +42,7 @@ export interface Lead {
 const LEADS_STORE: Lead[] = []
 
 let counter = 1
+let idCounter = 1
 
 export function generateBookingCode(): string {
   const pad = String(counter++).padStart(4, '0')
@@ -52,7 +52,7 @@ export function generateBookingCode(): string {
 export function saveLead(data: Omit<Lead, 'id' | 'bookingCode' | 'createdAt' | 'status'>): Lead {
   const lead: Lead = {
     ...data,
-    id:          crypto.randomUUID(),
+    id:          idCounter++,
     bookingCode: generateBookingCode(),
     createdAt:   new Date().toISOString(),
     status:      'new',
@@ -83,7 +83,6 @@ export interface BookingPayload {
   houseTypeId:   string
   houseTypeName: string
   clusterName:   string
-  unitFacing:    string
   basePrice:     number
   totalPrice:    number
   customization: CustomizationState

@@ -21,7 +21,7 @@ interface KioskStore {
   pickType:      (t: HouseType) => void
   pickUnit:      (u: Unit)    => void
   setCustom:     (patch: Partial<CustomizationState>) => void
-  toggleAddon:   (id: string) => void
+  toggleAddon:   (id: number) => void
   setPayment:    (m: PaymentMethod) => void
   setBookingCode:(c: string)  => void
   setLoading:    (v: boolean) => void
@@ -45,7 +45,7 @@ export const useStore = create<KioskStore>((set, get) => ({
   pickType:      (t)  => set({ houseType: t, unit: null, custom: { ...DEFAULT_CUSTOM, addons: {} }, screen: 'unit' }),
   pickUnit:      (u)  => set({ unit: u }),
   setCustom:     (p)  => set(s => ({ custom: { ...s.custom, ...p } })),
-  toggleAddon:   (id) => set(s => ({
+  toggleAddon:   (id: number) => set(s => ({
     custom: { ...s.custom, addons: { ...s.custom.addons, [id]: !s.custom.addons[id] } }
   })),
   setPayment:    (m)  => set({ paymentMethod: m }),

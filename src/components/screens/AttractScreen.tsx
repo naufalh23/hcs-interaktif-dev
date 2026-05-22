@@ -3,7 +3,7 @@
 import { useStore } from "@/store/kiosk-store";
 import Image from "next/image";
 import { ATTRACT_CONTENT } from "@/data/content/attract-screen";
-import { BRAND } from "@/data/content/shared";
+import { BRAND } from "@/data/content/shared"; // nameShort, nameSuffix masih dipakai
 
 function GoldDivider() {
   return (
@@ -82,7 +82,7 @@ export default function AttractScreen() {
             {BRAND.nameShort} <span className="text-[#1B5E35]">{BRAND.nameSuffix}</span>
           </div>
           <div className="text-[9.5px] tracking-[4.5px] text-[#8A9E8C] uppercase font-semibold">
-            {BRAND.tagline}
+            {ATTRACT_CONTENT.subtitle}
           </div>
         </div>
 
@@ -92,10 +92,7 @@ export default function AttractScreen() {
 
         {/* Headline */}
         <h1 className="font-serif font-light text-[64px] leading-[0.86] tracking-[-0.5px] text-[#163F25] mb-7.5">
-          {ATTRACT_CONTENT.headline.line1}
-          <br />
-          <em className="text-[#1B5E35] italic">{ATTRACT_CONTENT.headline.em}</em>{" "}
-          {ATTRACT_CONTENT.headline.line2}
+          {ATTRACT_CONTENT.heading}
         </h1>
 
         <button

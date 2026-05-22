@@ -4,7 +4,7 @@
 // ============================================================
 
 export interface AddonOption {
-  id:       string
+  id:       number
   name:     string
   desc:     string
   price:    number        // 0 = gratis
@@ -13,37 +13,37 @@ export interface AddonOption {
 
 export const ADDON_OPTIONS: AddonOption[] = [
   {
-    id:    'pre_ac',
+    id:    1,
     name:  'Pre-Installation AC',
     desc:  'Instalasi Sudah Disiapkan Rapi, Unit AC Tinggal Dipasang Tanpa Repot.',
     price: 0,
   },
   {
-    id:    'cat',
+    id:    2,
     name:  'Cat Interior (Warna Custom)',
     desc:  'Warna Bisa Disesuaikan Dengan Selera, Tetap Menggunakan Cat Berkualitas Standar HCS.',
     price: 0,
   },
   {
-    id:    'smartlock',
+    id:    3,
     name:  'Smart Door Lock',
     desc:  'Akses Lebih Aman Dan Praktis Dengan Sistem Kunci Digital Modern.',
     price: 0,
   },
   {
-    id:    'ac1pk',
+    id:    4,
     name:  'AC 1 PK + Instalasi',
     desc:  'Nikmati Kenyamanan Maksimal Dengan AC Lengkap Beserta Pemasangan.',
     price: 6_000_000,
   },
   {
-    id:    'ac05pk',
+    id:    5,
     name:  'AC 1/2 PK + Instalasi',
     desc:  'Solusi Hemat Dan Praktis Dengan AC Lengkap Siap Pakai.',
     price: 5_000_000,
   },
   {
-    id:      'solar',
+    id:      6,
     name:    'Panel Surya',
     desc:    'Hemat Energi Dengan Solusi Panel Surya Sesuai Kebutuhan Anda.',
     price:   0,
@@ -52,7 +52,7 @@ export const ADDON_OPTIONS: AddonOption[] = [
 ]
 
 export interface CustomizationState {
-  addons: Record<string, boolean>
+  addons: Record<number, boolean>
 }
 
 export const DEFAULT_CUSTOM: CustomizationState = {

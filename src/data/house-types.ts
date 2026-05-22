@@ -9,9 +9,9 @@ export interface TypeVariant {
 }
 
 export interface HouseType {
-  id: string;
+  id: number;
   cluster: string;
-  types: TypeVariant[];  // min 1, maks 5 varian per cluster
+  types: TypeVariant[];
   basePrice: number;
   badge: "ready" | "indent" | "hot";
   badgeLabel: string;
@@ -19,71 +19,75 @@ export interface HouseType {
 
 export const HOUSE_TYPES: HouseType[] = [
   {
-    id: "t60",
-    cluster: "Cluster Damar",
-    types: [
-      { buildingArea: 60,  landArea: 84  },
-    ],
-    basePrice: 800_000_000,
-    badge: "ready",
-    badgeLabel: "Available",
-  },
-  {
-    id: "t70",
+    id: 1,
     cluster: "Cluster Akasia",
     types: [
-      { buildingArea: 45,  landArea: 81  },
-      { buildingArea: 51,  landArea: 105 },
-      { buildingArea: 72,  landArea: 120 },
+      { buildingArea: 45, landArea: 81  },
+      { buildingArea: 51, landArea: 105 },
+      { buildingArea: 72, landArea: 120 },
     ],
     basePrice: 900_000_000,
     badge: "ready",
     badgeLabel: "Available",
   },
   {
-    id: "t84",
+    id: 2,
     cluster: "Cluster Borneo",
     types: [
-      { buildingArea: 84,  landArea: 120 },
-      { buildingArea: 96,  landArea: 135 },
+      { buildingArea: 51, landArea: 105 },
+      { buildingArea: 72, landArea: 120 },
+      { buildingArea: 45, landArea: 81  },
     ],
-    basePrice: 1_400_000_000,
+    basePrice: 1_100_000_000,
     badge: "indent",
     badgeLabel: "Progres",
   },
   {
-    id: "t100",
+    id: 3,
     cluster: "Cluster Cemara",
     types: [
-      { buildingArea: 100, landArea: 120 },
-      { buildingArea: 110, landArea: 132 },
-      { buildingArea: 120, landArea: 144 },
+      { buildingArea: 45, landArea: 81 },
+      { buildingArea: 60, landArea: 60 },
+      { buildingArea: 38, landArea: 60 },
     ],
-    basePrice: 1_600_000_000,
+    basePrice: 800_000_000,
     badge: "ready",
-    badgeLabel: "New",
+    badgeLabel: "Available",
   },
   {
-    id: "t120",
-    cluster: "Cluster Gaharu",
+    id: 4,
+    cluster: "Cluster Damar",
     types: [
-      { buildingArea: 120, landArea: 150 },
-      { buildingArea: 135, landArea: 168 },
+      { buildingArea: 100, landArea: 120 },
+      { buildingArea: 72,  landArea: 120 },
+      { buildingArea: 90,  landArea: 90  },
+      { buildingArea: 51,  landArea: 105 },
     ],
-    basePrice: 2_000_000_000,
-    badge: "indent",
-    badgeLabel: "Progres",
+    basePrice: 1_400_000_000,
+    badge: "hot",
+    badgeLabel: "Launching!",
   },
   {
-    id: "t150",
+    id: 5,
     cluster: "Cluster Eucalyptus",
     types: [
-      { buildingArea: 150, landArea: 180 },
-      { buildingArea: 160, landArea: 192 },
-      { buildingArea: 175, landArea: 210 },
+      { buildingArea: 45, landArea: 81  },
+      { buildingArea: 51, landArea: 105 },
+      { buildingArea: 72, landArea: 120 },
     ],
-    basePrice: 2_800_000_000,
+    basePrice: 950_000_000,
     badge: "hot",
     badgeLabel: "Premium",
+  },
+  {
+    id: 6,
+    cluster: "Cluster Gaharu",
+    types: [
+      { buildingArea: 100, landArea: 120 },
+      { buildingArea: 72,  landArea: 120 },
+    ],
+    basePrice: 1_600_000_000,
+    badge: "indent",
+    badgeLabel: "Progres",
   },
 ];

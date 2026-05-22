@@ -15,12 +15,12 @@ const BADGE_RIBBON: Record<string, string> = {
 };
 
 const CLUSTER_IMAGE: Record<string, string> = {
-  "Cluster Akasia": "/Akasia.png",
-  "Cluster Borneo": "/Borneo.png",
-  "Cluster Cemara": "/Cemara.png",
-  "Cluster Damar": "/Damar.png",
+  "Cluster Akasia":     "/Akasia.png",
+  "Cluster Borneo":     "/Borneo.png",
+  "Cluster Cemara":     "/Cemara.png",
+  "Cluster Damar":      "/Damar.png",
   "Cluster Eucalyptus": "/Eucalyptus.png",
-  "Cluster Gaharu": "/Gaharu.png",
+  "Cluster Gaharu":     "/Gaharu.png",
 };
 
 export default function ClusterScreen({
@@ -42,9 +42,7 @@ export default function ClusterScreen({
             {CLUSTER_CONTENT.stepLabel}
           </div>
           <h1 className="font-serif font-bold text-[38px] text-[#163F25] leading-[1.1] mb-1">
-            {CLUSTER_CONTENT.heading.prefix}{" "}
-            <em className="text-[#1B5E35] italic">{CLUSTER_CONTENT.heading.em}</em>{" "}
-            {CLUSTER_CONTENT.heading.suffix}
+            {CLUSTER_CONTENT.heading}{" "}
           </h1>
           <p className="text-xs text-[#7A9480]">{CLUSTER_CONTENT.subtitle}</p>
         </div>

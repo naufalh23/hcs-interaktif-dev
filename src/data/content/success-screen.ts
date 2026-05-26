@@ -13,7 +13,7 @@ export const SUCCESS_CONTENT = {
   },
   contact: {
     icon:  "📞",
-    text:  "Tim kami akan menghubungi Anda via WhatsApp:",
+    text:  "Tim kami akan menghubungi Anda via WhatsApp",
     phone: "+62 811 1130 114",
   },
   autoResetNote: "Halaman akan kembali otomatis dalam beberapa saat",

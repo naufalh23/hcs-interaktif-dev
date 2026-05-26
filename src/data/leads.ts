@@ -78,9 +78,9 @@ export interface BookingPayload {
   agentCode?:    string
   domicile?:     string
   paymentMethod: PaymentMethod
-  unitId:        string
+  unitId:        number
   unitCode:      string
-  houseTypeId:   string
+  houseTypeId:   number
   houseTypeName: string
   clusterName:   string
   basePrice:     number

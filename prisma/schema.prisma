@@ -260,7 +260,7 @@ model Unit {
   cardMediaId   Int?          @map("card_media_id")
   code          String        @unique @db.VarChar(20)    // "D-01"
   block         String        @db.VarChar(100)
-  facing        String        @db.VarChar(20)
+  facing        String?       @db.VarChar(20)
   status        UnitStatus    @default(available)
   price         BigInt
   notes         String?       @db.VarChar(200)

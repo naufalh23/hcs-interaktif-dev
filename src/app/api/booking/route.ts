@@ -1,12 +1,5 @@
-import { NextResponse }  from "next/server";
-import { prisma }         from "@/lib/prisma";
-import { PaymentMethod }  from "@prisma/client";
-
-const PAYMENT_MAP: Record<string, PaymentMethod> = {
-  "KPR Bank":      PaymentMethod.KPR_Bank,
-  "Cash Keras":    PaymentMethod.Cash_Keras,
-  "Cash Bertahap": PaymentMethod.Cash_Bertahap,
-};
+import { NextResponse } from "next/server";
+import { prisma }        from "@/lib/prisma";
 
 export async function POST(req: Request) {
   try {
@@ -28,8 +21,7 @@ export async function POST(req: Request) {
       customization,
     } = body;
 
-    // Map payment method string → Prisma enum
-    const paymentMethod = PAYMENT_MAP[paymentRaw as string];
+    const paymentMethod = (paymentRaw as string) || "";
     if (!paymentMethod) {
       return NextResponse.json({ error: "Metode pembayaran tidak valid" }, { status: 400 });
     }

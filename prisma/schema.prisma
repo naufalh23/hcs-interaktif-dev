@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,40 +7,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  name      String?
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+// ============================================================
+//  ENUMS
+// ============================================================
 
+// ADMIN : bisa create/kelola akun & lihat audit log
+// USER  : bisa edit konten & lihat dashboard
 enum Role {
   USER
   ADMIN
 }
 
-// ============================================================
-//  ENUMS
-// ============================================================
-
+// Badge cluster — editable labelnya lewat badgeLabel, enum hanya menentukan warna/ikon
 enum Badge {
   ready
-  indent
-  hot
+  on_progress
+  out_of_stock
 }
 
-enum UnitStatus {
-  available
-  indent
-  sold
-}
-
-// 'fixed'        → tampil harga normal
-// 'free'         → tampil badge FREE
-// 'contact_sales'→ tampil icon telp + contact_label
+// fixed        → tampilkan harga normal
+// free         → tampilkan badge FREE
+// contact_sales→ tampilkan ikon telp + label
 enum PriceDisplayMode {
   fixed
   free
@@ -63,12 +44,7 @@ enum FieldType {
   checkbox
 }
 
-enum PaymentMethod {
-  KPR_Bank      @map("KPR Bank")
-  Cash_Keras    @map("Cash Keras")
-  Cash_Bertahap @map("Cash Bertahap")
-}
-
+// Status lead — tetap enum karena alur CRM ini terstruktur dan tidak perlu custom
 enum LeadStatus {
   new
   contacted
@@ -77,83 +53,95 @@ enum LeadStatus {
   cancelled
 }
 
-enum AdminRole {
-  superadmin
-  admin
-  viewer
+// ============================================================
+//  USER
+//  Satu model untuk semua pengguna sistem.
+//  ADMIN: bisa manage akun & audit log
+//  USER : bisa edit konten & lihat dashboard
+// ============================================================
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique @db.VarChar(200)
+  password  String   @db.VarChar(255)
+  name      String?  @db.VarChar(100)
+  role      Role     @default(USER)
+  isActive  Boolean  @default(true) @map("is_active")
+  lastLoginAt DateTime? @map("last_login_at") @db.Timestamptz
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  mediaUploads MediaLibrary[]
+  auditLogs    AuditLog[]
+
+  @@map("users")
 }
 
 // ============================================================
 //  MEDIA LIBRARY
-//  Semua aset gambar/icon dikelola terpusat.
-//  Tabel lain cukup simpan FK ke sini.
 // ============================================================
 
 model MediaLibrary {
-  id           Int       @id @default(autoincrement())
-  fileName     String    @map("file_name") @db.VarChar(255)
-  url          String    @db.VarChar(500)
-  mimeType     String    @map("mime_type") @db.VarChar(100)
-  fileSizeKb   Int       @map("file_size_kb")
-  altText      String?   @map("alt_text") @db.VarChar(255)
-  uploadedById Int?      @map("uploaded_by_id")
-  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  id           Int      @id @default(autoincrement())
+  fileName     String   @map("file_name") @db.VarChar(255)
+  url          String   @db.VarChar(500)
+  mimeType     String   @map("mime_type") @db.VarChar(100)
+  fileSizeKb   Int      @map("file_size_kb")
+  altText      String?  @map("alt_text") @db.VarChar(255)
+  uploadedById String?  @map("uploaded_by_id")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
 
-  uploadedBy      AdminUser?      @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+  uploadedBy User? @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
 
-  // Relasi balik (satu media bisa dipakai di banyak tempat)
-  kioskConfigLogos    KioskConfig[]   @relation("KioskLogo")
-  kioskConfigHeroes   KioskConfig[]   @relation("KioskHero")
-  pageSections        PageSection[]
-  houseTypeCards      HouseType[]
-  houseFacilities     HouseFacility[]
-  unitCards           Unit[]
-  addonIcons          AddonOption[]
-  agentPhotos         Agent[]
+  // Back-relations
+  kioskConfigLogos  KioskConfig[] @relation("KioskLogo")
+  kioskConfigHeroes KioskConfig[] @relation("KioskHero")
+  pageSections      PageSection[]
+  houseTypeCards    HouseType[]
+  unitCards         Unit[]
+  unitImages        UnitImage[]
+  addonIcons        AddonOption[]
+  agentPhotos       Agent[]
 
   @@map("media_library")
 }
 
 // ============================================================
 //  KIOSK CONFIG
-//  Root konfigurasi per device/kiosk. Satu baris = satu kiosk.
 // ============================================================
 
 model KioskConfig {
-  id          Int       @id @default(autoincrement())
-  kioskId     String    @unique @map("kiosk_id") @db.VarChar(50)
-  siteName    String    @map("site_name") @db.VarChar(100)
-  tagline     String?   @db.VarChar(200)
-  logoMediaId Int?      @map("logo_media_id")
-  heroMediaId Int?      @map("hero_media_id")
-  isActive    Boolean   @default(true) @map("is_active")
-  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  id          Int      @id @default(autoincrement())
+  kioskId     String   @unique @map("kiosk_id") @db.VarChar(50)
+  siteName    String   @map("site_name") @db.VarChar(100)
+  tagline     String?  @db.VarChar(200)
+  logoMediaId Int?     @map("logo_media_id")
+  heroMediaId Int?     @map("hero_media_id")
+  isActive    Boolean  @default(true) @map("is_active")
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-  logo          MediaLibrary?   @relation("KioskLogo",  fields: [logoMediaId], references: [id], onDelete: SetNull)
-  hero          MediaLibrary?   @relation("KioskHero",  fields: [heroMediaId], references: [id], onDelete: SetNull)
+  logo MediaLibrary? @relation("KioskLogo", fields: [logoMediaId], references: [id], onDelete: SetNull)
+  hero MediaLibrary? @relation("KioskHero", fields: [heroMediaId], references: [id], onDelete: SetNull)
 
-  stats         KioskStat[]
-  pageSections  PageSection[]
-  formSchemas   FormSchema[]
-  leads         Lead[]
-  sessions      KioskSession[]
+  stats        KioskStat[]
+  pageSections PageSection[]
+  formSchemas  FormSchema[]
+  leads        Lead[]
+  sessions     KioskSession[]
 
   @@map("kiosk_config")
 }
 
 // ============================================================
 //  KIOSK STATS
-//  Counter di landing page (6 Cluster / 5 Fasilitas / 10+ Destinasi).
-//  Dipisah agar admin bisa ubah nilai, label, urutan, atau tambah stat baru.
 // ============================================================
 
 model KioskStat {
   id            Int         @id @default(autoincrement())
   kioskConfigId Int         @map("kiosk_config_id")
-  value         String      @db.VarChar(20)   // "6", "5", "10+"
-  label         String      @db.VarChar(50)   // "Cluster", "Fasilitas", "Destinasi"
+  value         String      @db.VarChar(20) // "6", "5", "10+"
+  label         String      @db.VarChar(50) // "Cluster", "Fasilitas"
   sortOrder     Int         @default(0) @map("sort_order")
-
   kioskConfig   KioskConfig @relation(fields: [kioskConfigId], references: [id], onDelete: Cascade)
 
   @@map("kiosk_stats")
@@ -161,26 +149,20 @@ model KioskStat {
 
 // ============================================================
 //  PAGE SECTIONS
-//  Konten teks & gambar per halaman yang bisa diubah dari CMS.
-//  Layout/komponen tetap hardcoded di frontend.
-//  page_slug: 'landing' | 'cluster' | 'unit' | 'customization' | 'booking'
-//  section_key: identifier unik per blok dalam satu halaman,
-//               misal 'hero', 'step_label', 'disclaimer', dsb.
 // ============================================================
 
 model PageSection {
-  id            Int         @id @default(autoincrement())
-  kioskConfigId Int         @map("kiosk_config_id")
-  pageSlug      String      @map("page_slug") @db.VarChar(50)
-  sectionKey    String      @map("section_key") @db.VarChar(100)
-  title         String?     @db.VarChar(255)
-  subtitle      String?     @db.Text
-  mediaId       Int?        @map("media_id")
-  extraContent  Json?       @map("extra_content")   // overflow fields yg tidak umum
-  sortOrder     Int         @default(0) @map("sort_order")
-  isVisible     Boolean     @default(true) @map("is_visible")
-
-  kioskConfig   KioskConfig  @relation(fields: [kioskConfigId], references: [id], onDelete: Cascade)
+  id            Int           @id @default(autoincrement())
+  kioskConfigId Int           @map("kiosk_config_id")
+  pageSlug      String        @map("page_slug") @db.VarChar(50)
+  sectionKey    String        @map("section_key") @db.VarChar(100)
+  title         String?       @db.VarChar(255)
+  subtitle      String?       @db.Text
+  mediaId       Int?          @map("media_id")
+  extraContent  Json?         @map("extra_content")
+  sortOrder     Int           @default(0) @map("sort_order")
+  isVisible     Boolean       @default(true) @map("is_visible")
+  kioskConfig   KioskConfig   @relation(fields: [kioskConfigId], references: [id], onDelete: Cascade)
   media         MediaLibrary? @relation(fields: [mediaId], references: [id], onDelete: SetNull)
 
   @@unique([kioskConfigId, pageSlug, sectionKey])
@@ -189,94 +171,124 @@ model PageSection {
 }
 
 // ============================================================
-//  HOUSE TYPES  (Tipe Hunian)
+//  HOUSE TYPES  (Cluster)
+//  Satu baris = satu cluster (Akasia, Borneo, dsb).
+//  Varian tipe (45/81, 72/120) ada di HouseTypeVariant.
 // ============================================================
 
 model HouseType {
-  id            Int       @id @default(autoincrement())
-  cardMediaId   Int?      @map("card_media_id")
-  cluster       String    @db.VarChar(100)
-  name          String    @db.VarChar(100)    // "Tipe 60/84"
-  buildingArea  Int       @map("building_area")
-  landArea      Int       @map("land_area")
-  floors        Int       @default(1)
-  bedrooms      Int
-  bathrooms     Int
-  basePrice     BigInt    @map("base_price")
-  badge         Badge
-  badgeLabel    String    @map("badge_label") @db.VarChar(50)
-  description   String?   @db.Text
-  isActive      Boolean   @default(true) @map("is_active")
-  sortOrder     Int       @default(0) @map("sort_order")
+  id          Int      @id @default(autoincrement())
+  cardMediaId Int?     @map("card_media_id")
+  cluster     String   @db.VarChar(100) // "Cluster Akasia"
+  basePrice   BigInt   @map("base_price")
+  badge       Badge
+  badgeLabel  String   @map("badge_label") @db.VarChar(50) // teks bebas, misal "Launching!"
+  description String?  @db.Text
+  isActive    Boolean  @default(true) @map("is_active")
+  sortOrder   Int      @default(0) @map("sort_order")
 
-  cardMedia     MediaLibrary?   @relation(fields: [cardMediaId], references: [id], onDelete: SetNull)
-  wallColors    WallColor[]
-  facilities    HouseFacility[]
-  units         Unit[]
+  cardMedia MediaLibrary?      @relation(fields: [cardMediaId], references: [id], onDelete: SetNull)
+  variants  HouseTypeVariant[]
+  units     Unit[]
 
   @@index([isActive, sortOrder])
   @@map("house_types")
 }
 
 // ============================================================
-//  WALL COLORS  (Pilihan warna dinding per tipe)
+//  HOUSE TYPE VARIANTS  (Tipe per Cluster)
+//  Satu cluster bisa punya beberapa varian luas bangunan/tanah.
+//  Contoh: Akasia → 45/81, 51/105, 72/120.
 // ============================================================
 
-model WallColor {
-  id          Int       @id @default(autoincrement())
-  houseTypeId Int       @map("house_type_id")
-  hex         String    @db.VarChar(7)
-  name        String    @db.VarChar(50)
-  sortOrder   Int       @default(0) @map("sort_order")
+model HouseTypeVariant {
+  id           Int       @id @default(autoincrement())
+  houseTypeId  Int       @map("house_type_id")
+  buildingArea Int       @map("building_area") // LB m²
+  landArea     Int       @map("land_area")     // LT m²
+  sortOrder    Int       @default(0) @map("sort_order")
 
-  houseType   HouseType @relation(fields: [houseTypeId], references: [id], onDelete: Cascade)
+  houseType HouseType @relation(fields: [houseTypeId], references: [id], onDelete: Cascade)
+  units     Unit[]
+  leads     Lead[]
 
-  @@map("wall_colors")
+  @@unique([houseTypeId, buildingArea, landArea])
+  @@index([houseTypeId])
+  @@map("house_type_variants")
 }
 
 // ============================================================
-//  HOUSE FACILITIES  (Fasilitas per tipe)
+//  UNIT STATUS OPTIONS  (Status kavling — editable oleh admin)
+//  Contoh default: "available", "indent", "sold"
+//  Admin bisa tambah/ubah/hapus status sesuai kebutuhan.
+//  Unit.status menyimpan label sebagai String (soft reference).
 // ============================================================
 
-model HouseFacility {
-  id            Int           @id @default(autoincrement())
-  houseTypeId   Int           @map("house_type_id")
-  label         String        @db.VarChar(100)
-  iconMediaId   Int?          @map("icon_media_id")
+model UnitStatusOption {
+  id        Int     @id @default(autoincrement())
+  label     String  @unique @db.VarChar(50) // "available", "indent", "sold"
+  color     String  @db.VarChar(7)          // hex warna untuk badge UI, misal "#22c55e"
+  isDefault Boolean @default(false) @map("is_default")
+  isActive  Boolean @default(true) @map("is_active")
+  sortOrder Int     @default(0) @map("sort_order")
 
-  houseType     HouseType     @relation(fields: [houseTypeId], references: [id], onDelete: Cascade)
-  iconMedia     MediaLibrary? @relation(fields: [iconMediaId], references: [id], onDelete: SetNull)
-
-  @@map("house_facilities")
+  @@map("unit_status_options")
 }
 
 // ============================================================
-//  UNITS  (Kavling per tipe hunian)
+//  UNITS  (Kavling)
+//  houseTypeId       → cluster induk (untuk filter/grouping)
+//  houseTypeVariantId→ varian spesifik (45/81, 72/120, dsb)
+//  status            → String soft-ref ke UnitStatusOption.label
 // ============================================================
 
 model Unit {
-  id            Int           @id @default(autoincrement())
-  houseTypeId   Int           @map("house_type_id")
-  cardMediaId   Int?          @map("card_media_id")
-  code          String        @unique @db.VarChar(20)    // "D-01"
-  block         String        @db.VarChar(100)
-  facing        String?       @db.VarChar(20)
-  status        UnitStatus    @default(available)
-  price         BigInt
-  notes         String?       @db.VarChar(200)
-  isFeatured    Boolean       @default(false) @map("is_featured")
+  id                 Int               @id @default(autoincrement())
+  houseTypeId        Int               @map("house_type_id")
+  houseTypeVariantId Int?              @map("house_type_variant_id")
+  cardMediaId        Int?              @map("card_media_id")
+  code               String            @unique @db.VarChar(20) // "AK-01"
+  status             String            @default("available") @db.VarChar(50)
+  price              BigInt
+  floors             Int               @default(1)
+  bedrooms           Int               @default(2)
+  bathrooms          Int               @default(1)
+  notes              String?           @db.VarChar(200)
+  isFeatured         Boolean           @default(false) @map("is_featured")
 
-  houseType     HouseType     @relation(fields: [houseTypeId], references: [id])
-  cardMedia     MediaLibrary? @relation(fields: [cardMediaId], references: [id], onDelete: SetNull)
-  leads         Lead[]
+  houseType        HouseType          @relation(fields: [houseTypeId], references: [id])
+  houseTypeVariant HouseTypeVariant?  @relation(fields: [houseTypeVariantId], references: [id], onDelete: SetNull)
+  cardMedia        MediaLibrary?      @relation(fields: [cardMediaId], references: [id], onDelete: SetNull)
+  images           UnitImage[]
+  leads            Lead[]
 
   @@index([houseTypeId])
+  @@index([houseTypeVariantId])
   @@index([status])
   @@map("units")
 }
 
 // ============================================================
-//  ADDON OPTIONS  (Opsi add-on kustomisasi Step 3)
+//  UNIT IMAGES  (Foto carousel per kavling)
+//  url wajib; mediaId opsional untuk foto yang dikelola via MediaLibrary.
+// ============================================================
+
+model UnitImage {
+  id        Int           @id @default(autoincrement())
+  unitId    Int           @map("unit_id")
+  mediaId   Int?          @map("media_id")
+  url       String        @db.VarChar(500)
+  sortOrder Int           @default(0) @map("sort_order")
+
+  unit  Unit          @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  media MediaLibrary? @relation(fields: [mediaId], references: [id], onDelete: SetNull)
+
+  @@index([unitId])
+  @@map("unit_images")
+}
+
+// ============================================================
+//  ADDON OPTIONS
 // ============================================================
 
 model AddonOption {
@@ -287,126 +299,137 @@ model AddonOption {
   description      String?          @db.VarChar(255)
   price            BigInt           @default(0)
   priceDisplayMode PriceDisplayMode @default(fixed) @map("price_display_mode")
-  contactLabel     String?          @map("contact_label") @db.VarChar(100)  // untuk mode contact_sales
+  contactLabel     String?          @map("contact_label") @db.VarChar(100)
   isActive         Boolean          @default(true) @map("is_active")
   sortOrder        Int              @default(0) @map("sort_order")
 
-  iconMedia        MediaLibrary?    @relation(fields: [iconMediaId], references: [id], onDelete: SetNull)
-  leadAddons       LeadAddon[]
+  iconMedia  MediaLibrary? @relation(fields: [iconMediaId], references: [id], onDelete: SetNull)
+  leadAddons LeadAddon[]
 
   @@index([isActive, sortOrder])
   @@map("addon_options")
 }
 
 // ============================================================
-//  FORM SCHEMA  (Definisi form per kiosk, misal Form Pemesanan)
+//  PAYMENT OPTIONS  (Metode pembayaran — editable oleh admin)
+//  Contoh default: "KPR Bank", "Cash Keras", "Cash Bertahap"
+//  Lead.paymentMethod menyimpan label sebagai String snapshot.
+// ============================================================
+
+model PaymentOption {
+  id          Int     @id @default(autoincrement())
+  label       String  @unique @db.VarChar(100) // "KPR Bank", "Cash Keras"
+  description String? @db.VarChar(255)          // "Free biaya KPR*"
+  isActive    Boolean @default(true) @map("is_active")
+  sortOrder   Int     @default(0) @map("sort_order")
+
+  @@map("payment_options")
+}
+
+// ============================================================
+//  FORM SCHEMA
 // ============================================================
 
 model FormSchema {
-  id              Int         @id @default(autoincrement())
-  kioskConfigId   Int         @map("kiosk_config_id")
-  formKey         String      @unique @map("form_key") @db.VarChar(50)   // 'booking_form'
-  title           String      @db.VarChar(100)
-  subtitle        String?     @db.VarChar(255)
-  disclaimerText  String?     @map("disclaimer_text") @db.Text
-  ctaLabel        String      @map("cta_label") @db.VarChar(50)          // "Konfirmasi Booking"
-  updatedAt       DateTime    @updatedAt @map("updated_at") @db.Timestamptz
-
-  kioskConfig     KioskConfig @relation(fields: [kioskConfigId], references: [id], onDelete: Cascade)
-  fields          FormField[]
+  id             Int         @id @default(autoincrement())
+  kioskConfigId  Int         @map("kiosk_config_id")
+  formKey        String      @unique @map("form_key") @db.VarChar(50)
+  title          String      @db.VarChar(100)
+  subtitle       String?     @db.VarChar(255)
+  disclaimerText String?     @map("disclaimer_text") @db.Text
+  ctaLabel       String      @map("cta_label") @db.VarChar(50)
+  updatedAt      DateTime    @updatedAt @map("updated_at") @db.Timestamptz
+  kioskConfig    KioskConfig @relation(fields: [kioskConfigId], references: [id], onDelete: Cascade)
+  fields         FormField[]
 
   @@map("form_schema")
 }
 
 // ============================================================
-//  FORM FIELDS  (Field-field di dalam form)
-//  field_type: text | tel | email | textarea | select | radio | checkbox
-//  col_span: 1 (setengah lebar) | 2 (full lebar)
-//  validation_rules JSON contoh:
-//    { "minLength": 10, "pattern": "^08[0-9]+$", "message": "Format tidak valid" }
-//  options JSON contoh (untuk select/radio):
-//    [{ "label": "KPR Bank", "value": "KPR_Bank" }, ...]
+//  FORM FIELDS
 // ============================================================
 
 model FormField {
-  id               Int        @id @default(autoincrement())
-  formSchemaId     Int        @map("form_schema_id")
-  fieldKey         String     @map("field_key") @db.VarChar(50)     // "full_name", "phone"
-  label            String     @db.VarChar(100)
-  placeholder      String?    @db.VarChar(150)
-  fieldType        FieldType  @map("field_type")
-  isRequired       Boolean    @default(false) @map("is_required")
-  options          Json?                                            // untuk select / radio
-  validationRules  Json?      @map("validation_rules")
-  colSpan          Int        @default(1) @map("col_span")          // 1 atau 2
-  sortOrder        Int        @default(0) @map("sort_order")
-
-  formSchema       FormSchema @relation(fields: [formSchemaId], references: [id], onDelete: Cascade)
+  id              Int        @id @default(autoincrement())
+  formSchemaId    Int        @map("form_schema_id")
+  fieldKey        String     @map("field_key") @db.VarChar(50)
+  label           String     @db.VarChar(100)
+  placeholder     String?    @db.VarChar(150)
+  fieldType       FieldType  @map("field_type")
+  isRequired      Boolean    @default(false) @map("is_required")
+  options         Json?
+  validationRules Json?      @map("validation_rules")
+  colSpan         Int        @default(1) @map("col_span")
+  sortOrder       Int        @default(0) @map("sort_order")
+  formSchema      FormSchema @relation(fields: [formSchemaId], references: [id], onDelete: Cascade)
 
   @@unique([formSchemaId, fieldKey])
   @@map("form_fields")
 }
 
 // ============================================================
-//  AGENTS  (Marketing agent)
+//  AGENTS
 // ============================================================
 
 model Agent {
-  id            Int           @id @default(autoincrement())
-  photoMediaId  Int?          @map("photo_media_id")
-  name          String        @db.VarChar(100)
-  code          String        @unique @db.VarChar(20)
-  phone         String?       @db.VarChar(30)
-  isActive      Boolean       @default(true) @map("is_active")
-  isWalkin      Boolean       @default(false) @map("is_walkin")
-
-  photoMedia    MediaLibrary? @relation(fields: [photoMediaId], references: [id], onDelete: SetNull)
-  leads         Lead[]
+  id           Int           @id @default(autoincrement())
+  photoMediaId Int?          @map("photo_media_id")
+  name         String        @db.VarChar(100)
+  code         String        @unique @db.VarChar(20)
+  phone        String?       @db.VarChar(30)
+  isActive     Boolean       @default(true) @map("is_active")
+  isWalkin     Boolean       @default(false) @map("is_walkin")
+  photoMedia   MediaLibrary? @relation(fields: [photoMediaId], references: [id], onDelete: SetNull)
+  leads        Lead[]
 
   @@map("agents")
 }
 
 // ============================================================
 //  LEADS  (Data customer & booking)
+//  Semua kolom harga dan metode pembayaran adalah snapshot
+//  immutable — tidak berubah walau data master diedit.
 // ============================================================
 
 model Lead {
-  id                    Int           @id @default(autoincrement())
-  bookingCode           String        @unique @map("booking_code") @db.VarChar(20)  // "HC-0001"
-  createdAt             DateTime      @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt             DateTime      @updatedAt @map("updated_at") @db.Timestamptz
+  id            Int        @id @default(autoincrement())
+  bookingCode   String     @unique @map("booking_code") @db.VarChar(20) // "HC-0001"
+  createdAt     DateTime   @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime   @updatedAt @map("updated_at") @db.Timestamptz
 
-  // Referensi kiosk sumber
-  kioskConfigId         Int?          @map("kiosk_config_id")
+  // Sumber kiosk
+  kioskConfigId Int?       @map("kiosk_config_id")
 
   // Data pemesan
-  fullName              String        @map("full_name") @db.VarChar(200)
-  phone                 String        @db.VarChar(30)
-  email                 String?       @db.VarChar(200)
-  agentId               Int?          @map("agent_id")
-  domicile              String?       @db.VarChar(100)
+  fullName  String  @map("full_name") @db.VarChar(200)
+  phone     String  @db.VarChar(30)
+  email     String? @db.VarChar(200)
+  domicile  String? @db.VarChar(100)
+  agentId   Int?    @map("agent_id")
 
   // Properti yang dipilih
-  unitId                Int           @map("unit_id")
+  unitId             Int  @map("unit_id")
+  houseTypeVariantId Int? @map("house_type_variant_id") // snapshot varian saat booking
 
-  // Snapshot harga saat booking (immutable setelah tersimpan)
-  basePrice             BigInt        @map("base_price")
-  extraPrice            BigInt        @default(0) @map("extra_price")
-  totalPrice            BigInt        @map("total_price")
-  paymentMethod         PaymentMethod @map("payment_method")
+  // Snapshot harga & metode (immutable)
+  basePrice     BigInt @map("base_price")
+  extraPrice    BigInt @default(0) @map("extra_price")
+  totalPrice    BigInt @map("total_price")
+  paymentMethod String @map("payment_method") @db.VarChar(100) // snapshot label PaymentOption
 
-  // Snapshot jawaban form (JSON agar tetap akurat walau form berubah)
-  formAnswers           Json          @default("{}") @map("form_answers")
+  // Snapshot jawaban form (agar tetap akurat walau definisi form berubah)
+  formAnswers Json @default("{}") @map("form_answers")
 
   // Tracking
-  status                LeadStatus    @default(new)
-  notes                 String?       @db.Text
-  contactedAt           DateTime?     @map("contacted_at") @db.Timestamptz
+  status      LeadStatus @default(new)
+  notes       String?    @db.Text
+  contactedAt DateTime?  @map("contacted_at") @db.Timestamptz
 
-  kioskConfig           KioskConfig?  @relation(fields: [kioskConfigId], references: [id], onDelete: SetNull)
-  agent                 Agent?        @relation(fields: [agentId], references: [id], onDelete: SetNull)
-  unit                  Unit          @relation(fields: [unitId], references: [id])
-  addons                LeadAddon[]
+  kioskConfig      KioskConfig?      @relation(fields: [kioskConfigId], references: [id], onDelete: SetNull)
+  agent            Agent?            @relation(fields: [agentId], references: [id], onDelete: SetNull)
+  unit             Unit              @relation(fields: [unitId], references: [id])
+  houseTypeVariant HouseTypeVariant? @relation(fields: [houseTypeVariantId], references: [id], onDelete: SetNull)
+  addons           LeadAddon[]
 
   @@index([bookingCode])
   @@index([status])
@@ -419,41 +442,36 @@ model Lead {
 
 // ============================================================
 //  LEAD ADDONS  (Junction: addon yang dipilih per lead)
-//  Dipisah dari JSON agar bisa di-query & diagregasi.
-//  priceSnapshot: harga addon saat booking, tidak berubah walau admin edit harga.
+//  priceSnapshot: harga addon saat booking, tidak berubah.
 // ============================================================
 
 model LeadAddon {
-  id              Int         @id @default(autoincrement())
-  leadId          Int         @map("lead_id")
-  addonOptionId   Int         @map("addon_option_id")
-  priceSnapshot   BigInt      @map("price_snapshot")
+  id            Int         @id @default(autoincrement())
+  leadId        Int         @map("lead_id")
+  addonOptionId Int         @map("addon_option_id")
+  priceSnapshot BigInt      @map("price_snapshot")
 
-  lead            Lead        @relation(fields: [leadId], references: [id], onDelete: Cascade)
-  addonOption     AddonOption @relation(fields: [addonOptionId], references: [id])
+  lead        Lead        @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  addonOption AddonOption @relation(fields: [addonOptionId], references: [id])
 
   @@unique([leadId, addonOptionId])
   @@map("lead_addons")
 }
 
 // ============================================================
-//  KIOSK SESSIONS  (State navigasi per sesi kiosk)
-//  Menyimpan progress step 1-4 agar tidak hilang saat layar di-refresh.
-//  selectionState JSON contoh:
-//    { "houseTypeId": 2, "unitId": 5, "addons": [1, 3], "colorIndex": 2 }
+//  KIOSK SESSIONS
 // ============================================================
 
 model KioskSession {
-  id              Int         @id @default(autoincrement())
-  kioskConfigId   Int         @map("kiosk_config_id")
-  sessionToken    String      @unique @map("session_token") @db.VarChar(100)
-  selectionState  Json        @default("{}") @map("selection_state")
-  stepReached     Int         @default(1) @map("step_reached")
-  startedAt       DateTime    @default(now()) @map("started_at") @db.Timestamptz
-  lastActiveAt    DateTime    @default(now()) @updatedAt @map("last_active_at") @db.Timestamptz
-  completed       Boolean     @default(false)
-
-  kioskConfig     KioskConfig @relation(fields: [kioskConfigId], references: [id], onDelete: Cascade)
+  id             Int         @id @default(autoincrement())
+  kioskConfigId  Int         @map("kiosk_config_id")
+  sessionToken   String      @unique @map("session_token") @db.VarChar(100)
+  selectionState Json        @default("{}") @map("selection_state")
+  stepReached    Int         @default(1) @map("step_reached")
+  startedAt      DateTime    @default(now()) @map("started_at") @db.Timestamptz
+  lastActiveAt   DateTime    @default(now()) @updatedAt @map("last_active_at") @db.Timestamptz
+  completed      Boolean     @default(false)
+  kioskConfig    KioskConfig @relation(fields: [kioskConfigId], references: [id], onDelete: Cascade)
 
   @@index([kioskConfigId])
   @@index([lastActiveAt(sort: Desc)])
@@ -461,44 +479,25 @@ model KioskSession {
 }
 
 // ============================================================
-//  ADMIN USERS  (Pengguna CMS)
-// ============================================================
-
-model AdminUser {
-  id            Int         @id @default(autoincrement())
-  email         String      @unique @db.VarChar(200)
-  passwordHash  String      @map("password_hash") @db.VarChar(255)
-  fullName      String      @map("full_name") @db.VarChar(100)
-  role          AdminRole   @default(admin)
-  isActive      Boolean     @default(true) @map("is_active")
-  lastLoginAt   DateTime?   @map("last_login_at") @db.Timestamptz
-  createdAt     DateTime    @default(now()) @map("created_at") @db.Timestamptz
-
-  mediaUploads  MediaLibrary[]
-  auditLogs     AuditLog[]
-
-  @@map("admin_users")
-}
-
-// ============================================================
-//  AUDIT LOGS  (Histori perubahan data oleh admin)
-//  Mencatat before/after state untuk rollback & compliance.
+//  AUDIT LOGS
+//  Hanya admin yang bisa membaca tabel ini.
+//  Mencatat before/after state untuk compliance & rollback.
 // ============================================================
 
 model AuditLog {
-  id            Int         @id @default(autoincrement())
-  adminUserId   Int         @map("admin_user_id")
-  action        String      @db.VarChar(50)    // 'create' | 'update' | 'delete'
-  entityType    String      @map("entity_type") @db.VarChar(50)  // 'HouseType', 'Unit', dsb
-  entityId      Int         @map("entity_id")
-  beforeState   Json?       @map("before_state")
-  afterState    Json?       @map("after_state")
-  ipAddress     String?     @map("ip_address") @db.VarChar(45)
-  createdAt     DateTime    @default(now()) @map("created_at") @db.Timestamptz
+  id         Int      @id @default(autoincrement())
+  userId     String   @map("user_id")
+  action     String   @db.VarChar(50)   // 'create' | 'update' | 'delete'
+  entityType String   @map("entity_type") @db.VarChar(50)
+  entityId   String   @map("entity_id") @db.VarChar(100) // String agar support cuid & int id
+  beforeState Json?   @map("before_state")
+  afterState  Json?   @map("after_state")
+  ipAddress  String?  @map("ip_address") @db.VarChar(45)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
 
-  adminUser     AdminUser   @relation(fields: [adminUserId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
-  @@index([adminUserId])
+  @@index([userId])
   @@index([entityType, entityId])
   @@index([createdAt(sort: Desc)])
   @@map("audit_logs")
